@@ -1,18 +1,10 @@
 package com.vsrstudio.growhabit.res
 
+import android.support.annotation.ColorInt
+import android.support.annotation.ColorRes
 import android.support.annotation.StringRes
 
-/**
- * An abstraction for the app resources provider.
- *
- * Implement it with something like AndroidResProvider. You
- * can extend it with methods like getDimension(...), etc.
- *
- * We don't want to have Android framework imports in our
- * classes for better testing, so we'll use this interface.
- *
- * Feel free to extend it for your own needs.
- */
 interface ResProvider {
-    fun getString(@StringRes stringId: Int): String
+    fun string(@StringRes stringId: Int): String
+    @ColorInt fun color(@ColorRes colorId: Int): Int
 }

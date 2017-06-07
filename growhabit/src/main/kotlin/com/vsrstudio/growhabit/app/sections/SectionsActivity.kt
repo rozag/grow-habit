@@ -1,10 +1,19 @@
-package com.vsrstudio.growhabit.app.main
+package com.vsrstudio.growhabit.app.sections
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import com.vsrstudio.growhabit.R
 import com.vsrstudio.growhabit.app.BaseActivity
 
-class MainActivity : BaseActivity() {
+class SectionsActivity : BaseActivity() {
+
+    companion object {
+        fun makeIntent(context: Context): Intent {
+            val intent = Intent(context, SectionsActivity::class.java)
+            return intent
+        }
+    }
 
     override val layoutResourceId = R.layout.activity_main
     override val toolbarTitleId = R.string.app_name

@@ -11,4 +11,8 @@
         <item name="android:windowActionBarOverlay">true</item>
     </style>
 
+    <style name="Theme.App.Splash">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
+    </style>
+
 </resources>
