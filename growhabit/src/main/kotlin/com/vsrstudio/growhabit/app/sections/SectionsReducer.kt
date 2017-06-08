@@ -10,8 +10,8 @@ class SectionsReducer(override val view: ArchView<SectionsController, SectionsRe
 
     override fun bind() = controller.bind(this)
     override fun unbind() = controller.unbind()
-    override fun onAssistantSelected() = view.updateViewState(AssistantState())
-    override fun onHabitsSelected() = view.updateViewState(HabitsState())
-    override fun onStatisticsSelected() = view.updateViewState(StatisticsState())
+    override fun onAssistantSelected() = view.updateViewState(AssistantState)
+    override fun onHabitsSelected() = view.updateViewState(HabitsState)
+    override fun onStatisticsSelected() = view.updateViewState(StatisticsState)
 
 }
