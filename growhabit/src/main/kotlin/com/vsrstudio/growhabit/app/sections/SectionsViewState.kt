@@ -2,5 +2,8 @@ package com.vsrstudio.growhabit.app.sections
 
 import com.vsrstudio.growhabit.arch.ViewState
 
-class SectionsViewState : ViewState {
+sealed class SectionsViewState : ViewState {
+    class AssistantState : SectionsViewState()
+    class HabitsState : SectionsViewState()
+    class StatisticsState : SectionsViewState()
 }

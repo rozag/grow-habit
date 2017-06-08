@@ -20,7 +20,7 @@ class SectionsActivity : ArchBaseActivity<SectionsController, SectionsReducer, S
     override val homeButtonEnabled = false
 
     override val controller: SectionsController = SectionsController()
-    override val reducer: SectionsReducer = SectionsReducer(this)
+    override val reducer: SectionsReducer = SectionsReducer(this, controller)
 
     override fun updateViewState(viewState: SectionsViewState) {
     }
