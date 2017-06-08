@@ -1,9 +1,8 @@
-package com.vsrstudio.growhabit.app
+package com.vsrstudio.growhabit
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import com.vsrstudio.growhabit.R
 
 /**
  * Simple base class for all activities in the app.

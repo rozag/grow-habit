@@ -2,11 +2,10 @@ package com.vsrstudio.growhabit.app.sections
 
 import android.content.Context
 import android.content.Intent
-import android.os.Bundle
 import com.vsrstudio.growhabit.R
-import com.vsrstudio.growhabit.app.BaseActivity
+import com.vsrstudio.growhabit.arch.ArchBaseActivity
 
-class SectionsActivity : BaseActivity() {
+class SectionsActivity : ArchBaseActivity<SectionsController, SectionsReducer, SectionsViewState>() {
 
     companion object {
         fun makeIntent(context: Context): Intent {
@@ -20,8 +19,10 @@ class SectionsActivity : BaseActivity() {
     override val displayHomeAsUp = false
     override val homeButtonEnabled = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override val controller: SectionsController = SectionsController()
+    override val reducer: SectionsReducer = SectionsReducer(this)
+
+    override fun updateViewState(viewState: SectionsViewState) {
     }
 
 }

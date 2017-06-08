@@ -1,7 +1,7 @@
 package com.vsrstudio.growhabit.app.splash
 
 import android.os.Bundle
-import com.vsrstudio.growhabit.app.BaseActivity
+import com.vsrstudio.growhabit.BaseActivity
 import com.vsrstudio.growhabit.app.sections.SectionsActivity
 
 class SplashActivity : BaseActivity() {

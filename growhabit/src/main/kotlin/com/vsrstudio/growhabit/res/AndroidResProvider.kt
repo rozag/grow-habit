@@ -1,7 +1,7 @@
 package com.vsrstudio.growhabit.res
 
 import android.support.v4.content.ContextCompat
-import com.vsrstudio.growhabit.app.App
+import com.vsrstudio.growhabit.App
 
 object AndroidResProvider : ResProvider {
 

@@ -2,7 +2,7 @@ package com.vsrstudio.growhabit.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.vsrstudio.growhabit.app.App
+import com.vsrstudio.growhabit.App
 
 object SharedPrefsProvider : PrefsProvider {
 

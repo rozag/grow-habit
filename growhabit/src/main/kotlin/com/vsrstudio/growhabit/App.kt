@@ -1,4 +1,4 @@
-package com.vsrstudio.growhabit.app
+package com.vsrstudio.growhabit
 
 import android.app.Application
 import com.vsrstudio.growhabit.BuildConfig
@@ -6,10 +6,10 @@ import com.vsrstudio.growhabit.crash.StubCrashProvider
 import com.vsrstudio.growhabit.logging.ReleaseTree
 import timber.log.Timber
 
-class App : Application() {
+class App : android.app.Application() {
 
     companion object Instance {
-        lateinit var instance: App
+        lateinit var instance: com.vsrstudio.growhabit.App
     }
 
     override fun onCreate() {
@@ -18,12 +18,12 @@ class App : Application() {
     }
 
     private fun initTimber() {
-        val tree = if (BuildConfig.DEBUG) {
-            Timber.DebugTree()
+        val tree = if (com.vsrstudio.growhabit.BuildConfig.DEBUG) {
+            timber.log.Timber.DebugTree()
         } else {
-            ReleaseTree(StubCrashProvider)
+            com.vsrstudio.growhabit.logging.ReleaseTree(com.vsrstudio.growhabit.crash.StubCrashProvider)
         }
-        Timber.plant(tree)
+        timber.log.Timber.plant(tree)
     }
 
 }
