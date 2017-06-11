@@ -22,7 +22,7 @@ class SectionsActivity : ArchBaseActivity<SectionsController, SectionsReducer, S
         }
     }
 
-    override val layoutResourceId = R.layout.activity_main
+    override val layoutResourceId = R.layout.activity_sections
     override val toolbarTitleId = R.string.app_name
     override val displayHomeAsUp = false
     override val homeButtonEnabled = false
