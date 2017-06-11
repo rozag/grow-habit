@@ -9,7 +9,7 @@ buildscript {
 
         // Build tools, SDKs, etc.
         buildTools = "25.0.3"
-        minSdk = 16
+        minSdk = 21
         compileSdk = 25
         targetSdk = 25
 
