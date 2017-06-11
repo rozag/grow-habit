@@ -36,8 +36,10 @@ class SectionsActivity : ArchBaseActivity<SectionsController, SectionsReducer, S
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // TODO: transparent status bar
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         bottomNavigationView.selectedItemId = R.id.action_habits
+        // TODO: BottomNavigationView items' colors do not change
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -62,17 +64,11 @@ class SectionsActivity : ArchBaseActivity<SectionsController, SectionsReducer, S
         SectionsViewState.StatisticsState -> showStatistics()
     }
 
-    private fun showAssistant() {
-        showFragment(AssistantFragment())
-    }
+    private fun showAssistant() = showFragment(AssistantFragment())
 
-    private fun showHabits() {
-        showFragment(HabitsFragment())
-    }
+    private fun showHabits() = showFragment(HabitsFragment())
 
-    private fun showStatistics() {
-        showFragment(StatisticsFragment())
-    }
+    private fun showStatistics() = showFragment(StatisticsFragment())
 
     private fun showFragment(fragment: Fragment) {
         supportFragmentManager.beginTransaction()

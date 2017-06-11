@@ -1,26 +1,19 @@
 <menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
         android:id="@+id/action_assistant"
-        android:enabled="true"
         android:icon="@drawable/ic_assistant_black_24dp"
-        android:title="@string/section_assistant"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/section_assistant"/>
 
     <item
         android:id="@+id/action_habits"
-        android:enabled="true"
         android:icon="@drawable/ic_adjust_black_24dp"
-        android:title="@string/section_habits"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/section_habits"/>
 
     <item
         android:id="@+id/action_statistics"
-        android:enabled="true"
         android:icon="@drawable/ic_insert_chart_black_24dp"
-        android:title="@string/section_statistics"
-        app:showAsAction="ifRoom"/>
+        android:title="@string/section_statistics"/>
 
 </menu>
