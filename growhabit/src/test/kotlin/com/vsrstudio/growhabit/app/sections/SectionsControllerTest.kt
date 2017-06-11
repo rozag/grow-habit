@@ -7,15 +7,6 @@ import org.mockito.Mockito.*
 class SectionsControllerTest {
 
     @Test
-    fun start_habitsSelected() {
-        val controller = SectionsController()
-        val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
-        controller.start()
-        verify(listener, times(1)).onHabitsSelected()
-    }
-
-    @Test
     fun selectAssistantWhileBound_assistantSelected() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)

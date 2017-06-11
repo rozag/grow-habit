@@ -6,8 +6,6 @@ class SectionsController : Controller {
 
     private var listener: SectionSwitchListener? = null
 
-    override fun start() = habitsSectionSelected()
-
     fun bind(listener: SectionSwitchListener) {
         this.listener = listener
     }
