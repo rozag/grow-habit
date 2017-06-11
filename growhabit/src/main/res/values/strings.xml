@@ -1,3 +1,9 @@
 <resources>
+    <!--Common-->
     <string name="app_name">Grow Habit</string>
+
+    <!--Sections-->
+    <string name="section_assistant">Assistant</string>
+    <string name="section_habits">Habits</string>
+    <string name="section_statistics">Statistics</string>
 </resources>

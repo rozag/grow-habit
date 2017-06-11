@@ -1,15 +1,24 @@
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <include layout="@layout/view_toolbar"/>
+    <FrameLayout
+        android:id="@+id/sections_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/sections_bottom_navigation_view"/>
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/sections_bottom_navigation_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/default_padding"
-        android:text="Hello Grow Habit!"/>
+        android:layout_alignParentBottom="true"
+        android:elevation="4dp"
+        app:itemBackground="@color/primary"
+        app:itemIconTint="@drawable/sections_bottom_navigation_icon_tint"
+        app:itemTextColor="@drawable/sections_bottom_navigation_icon_tint"
+        app:menu="@menu/sections_navigation_menu"/>
 
-</LinearLayout>
+</RelativeLayout>
