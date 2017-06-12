@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.vsrstudio.growhabit.App
 
-object SharedPrefsProvider : PrefsProvider {
+class SharedPrefsProvider : PrefsProvider {
 
     val PREFS_NAME = "growhabit"
     val prefs: SharedPreferences = App.instance.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

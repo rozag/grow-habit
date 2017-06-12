@@ -1,4 +1,4 @@
 package com.vsrstudio.growhabit.rconfig
 
-object StubRemoteConfigProvider : RemoteConfigProvider {
+class StubRemoteConfigProvider : RemoteConfigProvider {
 }
