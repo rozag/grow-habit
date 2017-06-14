@@ -1,8 +1,9 @@
 package com.vsrstudio.growhabit.model
 
 import java.util.*
+import java.util.concurrent.TimeUnit
 
-data class Date(val millis: Long) {
+data class Date(val seconds: Long) {
 
     companion object {
         fun current(): Date {
@@ -15,7 +16,8 @@ data class Date(val millis: Long) {
                     0,
                     0
             )
-            return Date(calendar.timeInMillis)
+            val seconds = TimeUnit.MILLISECONDS.toSeconds(calendar.timeInMillis)
+            return Date(seconds)
         }
     }
 

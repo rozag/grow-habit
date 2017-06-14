@@ -6,10 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import com.vsrstudio.growhabit.R
 import com.vsrstudio.growhabit.arch.ArchBaseFragment
+import com.vsrstudio.growhabit.repo.habit.CompositeHabitsRepo
 
 class HabitsFragment : ArchBaseFragment<HabitsController, HabitsReducer, HabitsViewState>() {
 
-    override val controller: HabitsController = HabitsController()
+    override val controller: HabitsController = HabitsController(CompositeHabitsRepo())
     override val reducer: HabitsReducer = HabitsReducer(this)
 
     override fun onCreateView(inflater: LayoutInflater?,
