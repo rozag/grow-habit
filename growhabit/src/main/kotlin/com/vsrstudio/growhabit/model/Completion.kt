@@ -1,3 +1,3 @@
 package com.vsrstudio.growhabit.model
 
-data class Completion(val id: String)
+enum class Completion { EMPTY, DONE, SKIP, FAIL }
