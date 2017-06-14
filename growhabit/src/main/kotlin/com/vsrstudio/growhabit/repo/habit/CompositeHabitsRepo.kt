@@ -1,9 +1,9 @@
 package com.vsrstudio.growhabit.repo.habit
 
 import com.vsrstudio.growhabit.model.Habit
-import com.vsrstudio.growhabit.repo.ApiSpec
+import com.vsrstudio.growhabit.repo.CompositeSpec
 
-class ApiHabitRepo : HabitRepo<ApiSpec> {
+class CompositeHabitsRepo : HabitsRepo<CompositeSpec> {
 
     override fun add(item: Habit) {
         // TODO
@@ -21,11 +21,11 @@ class ApiHabitRepo : HabitRepo<ApiSpec> {
         // TODO
     }
 
-    override fun remove(spec: ApiSpec) {
+    override fun remove(spec: CompositeSpec) {
         // TODO
     }
 
-    override fun query(spec: ApiSpec): List<Habit> {
+    override fun query(spec: CompositeSpec): List<Habit> {
         // TODO
         return emptyList()
     }

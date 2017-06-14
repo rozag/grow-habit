@@ -3,7 +3,7 @@ package com.vsrstudio.growhabit.repo.habit
 import com.vsrstudio.growhabit.model.Habit
 import com.vsrstudio.growhabit.repo.SqlSpec
 
-class SqlHabitRepo : HabitRepo<SqlSpec> {
+class SqlHabitsRepo : HabitsRepo<SqlSpec> {
 
     override fun add(item: Habit) {
         // TODO
