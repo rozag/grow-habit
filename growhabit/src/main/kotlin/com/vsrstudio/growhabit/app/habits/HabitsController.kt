@@ -1,9 +1,7 @@
 package com.vsrstudio.growhabit.app.habits
 
 import com.vsrstudio.growhabit.arch.Controller
-import com.vsrstudio.growhabit.model.Completion
-import com.vsrstudio.growhabit.model.Date
-import com.vsrstudio.growhabit.model.Habit
+import com.vsrstudio.growhabit.model.*
 import com.vsrstudio.growhabit.repo.habit.HabitsRepo
 
 class HabitsController(val habitsRepo: HabitsRepo<*>) : Controller {
@@ -17,6 +15,13 @@ class HabitsController(val habitsRepo: HabitsRepo<*>) : Controller {
         }
         val updatedHabit = Habit(habit.id, habit.title, newCompletions)
         habitsRepo.update(updatedHabit)
+    }
+
+    fun onHabitAdded(title: Title) {
+        val currentDate = Date.current()
+        val newCompletions = mapOf<Date, Completion>(currentDate to Completion.EMPTY)
+        val newHabit = Habit(Id.EMPTY, title, newCompletions)
+        habitsRepo.add(newHabit)
     }
 
 }

@@ -26,4 +26,18 @@ class HabitsControllerTest {
         verify(habitRepo, times(1)).update(expectedHabit)
     }
 
+    @Test
+    fun habitAdded_repoAddCalled() {
+        val habitRepo = mock(HabitsRepo::class.java)
+        val habitsController = HabitsController(habitRepo)
+        val title = Title("test_title")
+        habitsController.onHabitAdded(title)
+        val expectedHabit = Habit(
+                Id.EMPTY,
+                Title("test_title"),
+                mapOf(Date.current() to Completion.EMPTY)
+        )
+        verify(habitRepo, times(1)).add(expectedHabit)
+    }
+
 }
