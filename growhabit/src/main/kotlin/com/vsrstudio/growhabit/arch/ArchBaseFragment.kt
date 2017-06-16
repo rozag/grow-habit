@@ -10,12 +10,12 @@ abstract class ArchBaseFragment<out C : Controller, out R : Reducer, in S : View
 
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        reducer.bind()
+        reducer.subscribe()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        reducer.unbind()
+        reducer.unsubscribe()
     }
 
 }

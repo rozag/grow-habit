@@ -2,6 +2,7 @@ package com.vsrstudio.growhabit.repo.habit
 
 import com.vsrstudio.growhabit.model.Habit
 import com.vsrstudio.growhabit.repo.SqlSpec
+import io.reactivex.Observable
 
 class SqlHabitsRepo : HabitsRepo<SqlSpec> {
 
@@ -25,9 +26,9 @@ class SqlHabitsRepo : HabitsRepo<SqlSpec> {
         // TODO
     }
 
-    override fun query(spec: SqlSpec): List<Habit> {
+    override fun query(spec: SqlSpec): Observable<List<Habit>> {
         // TODO
-        return emptyList()
+        return Observable.fromCallable { emptyList<Habit>() }
     }
 
 }

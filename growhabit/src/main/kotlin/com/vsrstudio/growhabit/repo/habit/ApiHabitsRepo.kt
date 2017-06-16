@@ -2,6 +2,7 @@ package com.vsrstudio.growhabit.repo.habit
 
 import com.vsrstudio.growhabit.model.Habit
 import com.vsrstudio.growhabit.repo.ApiSpec
+import io.reactivex.Observable
 
 class ApiHabitsRepo : HabitsRepo<ApiSpec> {
 
@@ -25,9 +26,9 @@ class ApiHabitsRepo : HabitsRepo<ApiSpec> {
         // TODO
     }
 
-    override fun query(spec: ApiSpec): List<Habit> {
+    override fun query(spec: ApiSpec): Observable<List<Habit>> {
         // TODO
-        return emptyList()
+        return Observable.fromCallable { emptyList<Habit>() }
     }
 
 }

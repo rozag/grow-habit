@@ -10,7 +10,7 @@ class SectionsControllerTest {
     fun selectAssistantWhileBound_assistantSelected() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
+        controller.subscribe(listener)
         controller.assistantSectionSelected()
         verify(listener, times(1)).onAssistantSelected()
     }
@@ -19,7 +19,7 @@ class SectionsControllerTest {
     fun selectHabitsWhileBound_habitsSelected() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
+        controller.subscribe(listener)
         controller.habitsSectionSelected()
         verify(listener, times(1)).onHabitsSelected()
     }
@@ -28,7 +28,7 @@ class SectionsControllerTest {
     fun selectStatisticsWhileBound_statisticsSelected() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
+        controller.subscribe(listener)
         controller.statisticsSectionSelected()
         verify(listener, times(1)).onStatisticsSelected()
     }
@@ -37,8 +37,8 @@ class SectionsControllerTest {
     fun selectAssistantWhileUnbound_selectionIgnored() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
-        controller.unbind()
+        controller.subscribe(listener)
+        controller.unsubscibe()
         controller.assistantSectionSelected()
         verify(listener, times(0)).onAssistantSelected()
     }
@@ -47,8 +47,8 @@ class SectionsControllerTest {
     fun selectHabitsWhileUnbound_selectionIgnored() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
-        controller.unbind()
+        controller.subscribe(listener)
+        controller.unsubscibe()
         controller.habitsSectionSelected()
         verify(listener, times(0)).onHabitsSelected()
     }
@@ -57,8 +57,8 @@ class SectionsControllerTest {
     fun selectStatisticsWhileUnbound_selectionIgnored() {
         val controller = SectionsController()
         val listener = mock(SectionSwitchListener::class.java)
-        controller.bind(listener)
-        controller.unbind()
+        controller.subscribe(listener)
+        controller.unsubscibe()
         controller.statisticsSectionSelected()
         verify(listener, times(0)).onStatisticsSelected()
     }

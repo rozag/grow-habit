@@ -9,12 +9,12 @@ abstract class ArchBaseActivity<out C : Controller, out R : Reducer, in S : View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        reducer.bind()
+        reducer.subscribe()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        reducer.unbind()
+        reducer.unsubscribe()
     }
 
 }

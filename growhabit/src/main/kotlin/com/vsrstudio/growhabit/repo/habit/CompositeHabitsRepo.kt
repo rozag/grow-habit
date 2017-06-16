@@ -2,6 +2,7 @@ package com.vsrstudio.growhabit.repo.habit
 
 import com.vsrstudio.growhabit.model.Habit
 import com.vsrstudio.growhabit.repo.CompositeSpec
+import io.reactivex.Observable
 
 class CompositeHabitsRepo : HabitsRepo<CompositeSpec> {
 
@@ -25,9 +26,9 @@ class CompositeHabitsRepo : HabitsRepo<CompositeSpec> {
         // TODO
     }
 
-    override fun query(spec: CompositeSpec): List<Habit> {
+    override fun query(spec: CompositeSpec): Observable<List<Habit>> {
         // TODO
-        return emptyList()
+        return Observable.fromCallable { emptyList<Habit>() }
     }
 
 }

@@ -6,11 +6,11 @@ class SectionsController : Controller {
 
     private var listener: SectionSwitchListener? = null
 
-    fun bind(listener: SectionSwitchListener) {
+    fun subscribe(listener: SectionSwitchListener) {
         this.listener = listener
     }
 
-    fun unbind() {
+    fun unsubscibe() {
         this.listener = null
     }
 
