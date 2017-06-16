@@ -40,4 +40,22 @@ class HabitsControllerTest {
         verify(habitRepo, times(1)).add(expectedHabit)
     }
 
+    @Test
+    fun habitRemoved_repoRemoveCalled() {
+        val habitRepo = mock(HabitsRepo::class.java)
+        val habitsController = HabitsController(habitRepo)
+        val habitToRemove = Habit(
+                Id("test_id"),
+                Title("test_title"),
+                mapOf()
+        )
+        habitsController.onHabitRemoved(habitToRemove)
+        val expectedHabit = Habit(
+                Id("test_id"),
+                Title("test_title"),
+                mapOf()
+        )
+        verify(habitRepo, times(1)).remove(expectedHabit)
+    }
+
 }

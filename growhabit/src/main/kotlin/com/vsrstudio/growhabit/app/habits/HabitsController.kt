@@ -24,4 +24,8 @@ class HabitsController(val habitsRepo: HabitsRepo<*>) : Controller {
         habitsRepo.add(newHabit)
     }
 
+    fun onHabitRemoved(habitToRemove: Habit) {
+        habitsRepo.remove(habitToRemove)
+    }
+
 }
