@@ -28,4 +28,9 @@ class HabitsController(val habitsRepo: HabitsRepo<*>) : Controller {
         habitsRepo.remove(habitToRemove)
     }
 
+    fun onHabitRenamed(habitToRename: Habit, newTitle: Title) {
+        val updatedHabit = habitToRename.rename(newTitle)
+        habitsRepo.update(updatedHabit)
+    }
+
 }

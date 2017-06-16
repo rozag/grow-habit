@@ -58,4 +58,23 @@ class HabitsControllerTest {
         verify(habitRepo, times(1)).remove(expectedHabit)
     }
 
+    @Test
+    fun habitRenamed_repoUpdateCalled() {
+        val habitRepo = mock(HabitsRepo::class.java)
+        val habitsController = HabitsController(habitRepo)
+        val habitToRename = Habit(
+                Id("test_id"),
+                Title("test_title_1"),
+                mapOf()
+        )
+        val newTitle = Title("test_title_2")
+        habitsController.onHabitRenamed(habitToRename, newTitle)
+        val expectedHabit = Habit(
+                Id("test_id"),
+                Title("test_title_2"),
+                mapOf()
+        )
+        verify(habitRepo, times(1)).update(expectedHabit)
+    }
+
 }
