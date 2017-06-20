@@ -1,0 +1,20 @@
+package com.vsrstudio.view.arch
+
+import android.os.Bundle
+import com.vsrstudio.view.BaseActivity
+
+abstract class ArchBaseActivity<out C : Controller, out R : Reducer, in S : ViewState> :
+        BaseActivity(),
+        ArchView<C, R, S> {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        reducer.subscribe()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        reducer.unsubscribe()
+    }
+
+}

@@ -1,1 +1,1 @@
-include ':growhabit'
+include ':view', ':entity', ':common', ':controller', ':reducer', ':model'
