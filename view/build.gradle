@@ -40,8 +40,8 @@ android {
         abortOnError true
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        sourceCompatibility sourceCompatibilityVersion
+        targetCompatibility targetCompatibilityVersion
     }
     packagingOptions {
         exclude "META-INF/NOTICE"
@@ -85,9 +85,6 @@ dependencies {
     compile "com.android.support:design:${supportLibraryVersion}"
     compile "com.android.support:recyclerview-v7:${supportLibraryVersion}"
     compile "com.android.support:cardview-v7:${supportLibraryVersion}"
-
-    // Timber logging library
-    compile "com.jakewharton.timber:timber:${timberVersion}"
 
     // RxJava and Co.
     compile "io.reactivex.rxjava2:rxandroid:${rxAndroidVersion}"

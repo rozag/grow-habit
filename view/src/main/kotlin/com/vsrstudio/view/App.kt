@@ -1,7 +1,7 @@
 package com.vsrstudio.view
 
-import com.vsrstudio.view.crash.StubCrashProvider
-import com.vsrstudio.view.logging.ReleaseTree
+import com.vsrstudio.common.crash.StubCrashProvider
+import com.vsrstudio.common.logging.ReleaseTree
 import timber.log.Timber
 
 class App : android.app.Application() {

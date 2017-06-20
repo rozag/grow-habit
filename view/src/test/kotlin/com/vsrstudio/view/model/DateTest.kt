@@ -1,5 +1,6 @@
 package com.vsrstudio.view.model
 
+import com.vsrstudio.entity.Date
 import junit.framework.Assert.assertEquals
 import org.junit.Test
 
