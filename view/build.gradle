@@ -62,6 +62,11 @@ android {
 }
 
 dependencies {
+    // Module dependencies
+    compile project(":common")
+    compile project(":entity")
+    compile project(":reducer")
+
     // JUnit testing dependencies
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"

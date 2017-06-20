@@ -60,4 +60,8 @@ android {
 }
 
 dependencies {
+    // Module dependencies
+    compile project(":common")
+    compile project(":entity")
+    compile project(":model")
 }
