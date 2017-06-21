@@ -14,13 +14,13 @@ class HabitsContainer(val view: ArchView<HabitsViewState, HabitsAction>) :
     val reducer: HabitsReducer = HabitsReducer()
 
     override fun init() {
-        controller.subscribeOnUserActions(view.observeUserActions())
+        controller.subscribeOnActions(view.observeActions())
         view.subscribeOnViewState(reducer.observeViewState())
     }
 
     override fun finish() {
         reducer.unsubscribeFromModel()
-        controller.unsubscribeFromUserActions()
+        controller.unsubscribeFromActions()
         view.unsubscribeFromViewState()
     }
 

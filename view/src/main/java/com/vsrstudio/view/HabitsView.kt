@@ -23,7 +23,7 @@ class HabitsView(context: Context?) :
         // TODO
     }
 
-    override fun observeUserActions(): Observable<HabitsAction> {
+    override fun observeActions(): Observable<HabitsAction> {
         // TODO
         return Observable.empty()
     }

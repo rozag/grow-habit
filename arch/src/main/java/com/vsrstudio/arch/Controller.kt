@@ -3,6 +3,6 @@ package com.vsrstudio.arch
 import io.reactivex.Observable
 
 interface Controller<A : Action> {
-    fun subscribeOnUserActions(observable: Observable<A>)
-    fun unsubscribeFromUserActions()
+    fun subscribeOnActions(observable: Observable<A>)
+    fun unsubscribeFromActions()
 }

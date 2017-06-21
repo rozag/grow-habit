@@ -6,11 +6,11 @@ import io.reactivex.Observable
 
 class HabitsController : Controller<HabitsAction> {
 
-    override fun subscribeOnUserActions(observable: Observable<HabitsAction>) {
+    override fun subscribeOnActions(observable: Observable<HabitsAction>) {
         // TODO
     }
 
-    override fun unsubscribeFromUserActions() {
+    override fun unsubscribeFromActions() {
         // TODO
     }
 
