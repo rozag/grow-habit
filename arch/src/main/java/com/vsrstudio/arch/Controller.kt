@@ -1,3 +1,8 @@
 package com.vsrstudio.arch
 
-interface Controller
+import io.reactivex.Observable
+
+interface Controller<A : UserAction> {
+    fun subscribeOnUserActions(observable: Observable<A>)
+    fun unsubscribeFromUserActions()
+}

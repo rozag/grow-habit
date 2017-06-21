@@ -5,6 +5,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
 import android.view.MenuItem
+import android.view.View
+import android.view.ViewGroup
+import com.vsrstudio.view.AssistantView
+import com.vsrstudio.view.HabitsView
+import com.vsrstudio.view.StatisticsView
 
 class SectionsActivity : BaseActivity(),
         BottomNavigationView.OnNavigationItemSelectedListener {
@@ -24,6 +29,9 @@ class SectionsActivity : BaseActivity(),
     private val bottomNavigationView by lazy {
         findViewById(R.id.sections_bottom_navigation_view) as BottomNavigationView
     }
+    private val contentLayout: ViewGroup by lazy {
+        findViewById(R.id.sections_content) as ViewGroup
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,6 +39,22 @@ class SectionsActivity : BaseActivity(),
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         bottomNavigationView.selectedItemId = R.id.action_habits
         // TODO: BottomNavigationView items' colors do not change
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // TODO: handle containers
+    }
+
+    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
+        super.onRestoreInstanceState(savedInstanceState)
+        showCurrentView()
+    }
+
+    private fun showCurrentView() {
+        val currentItemId = bottomNavigationView.selectedItemId
+        val currentItem = bottomNavigationView.menu.findItem(currentItemId)
+        onNavigationItemSelected(currentItem)
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -50,15 +74,27 @@ class SectionsActivity : BaseActivity(),
     }
 
     private fun showAssistant() {
-        // TODO:
+        // TODO: DI container
+        showView(AssistantView(this))
     }
 
     private fun showHabits() {
-        // TODO:
+        // TODO: DI container
+        showView(HabitsView(this))
     }
 
     private fun showStatistics() {
-        // TODO:
+        // TODO: DI container
+        showView(StatisticsView(this))
+    }
+
+    private fun showView(view: View) {
+        contentLayout.run {
+            if (childCount != 0) {
+                removeViewAt(0)
+            }
+            addView(view)
+        }
     }
 
 }

@@ -75,4 +75,7 @@ dependencies {
 
     // RxJava
     compile "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
+
+    // RxJava
+    compile "io.reactivex.rxjava2:rxjava:${rxJavaVersion}"
 }

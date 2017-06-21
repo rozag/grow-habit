@@ -1,7 +1,7 @@
 package com.vsrstudio.arch
 
-interface Reducer {
-    val view: View<*, *, *>
-    fun subscribe()
-    fun unsubscribe()
+import io.reactivex.Observable
+
+interface Reducer<S : ViewState> {
+    fun observeViewState(): Observable<S>
 }

@@ -10,6 +10,8 @@ class App : android.app.Application() {
         lateinit var instance: App
     }
 
+    val appContainer: AppContainer = AppContainer()
+
     override fun onCreate() {
         super.onCreate()
         initTimber()

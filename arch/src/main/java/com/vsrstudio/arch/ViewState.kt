@@ -1,4 +1,3 @@
 package com.vsrstudio.arch
 
-interface ViewState {
-}
+interface ViewState
