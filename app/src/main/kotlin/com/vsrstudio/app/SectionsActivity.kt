@@ -21,6 +21,12 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         }
     }
 
+    private val ARG_CURRENT_VIEW = "current_view"
+
+    private val VIEW_ASSISTANT = 0
+    private val VIEW_HABITS = 1
+    private val VIEW_STATISTICS = 2
+
     override val layoutResourceId = R.layout.activity_sections
     override val toolbarTitleId = R.string.app_name
     override val displayHomeAsUp = false
@@ -33,13 +39,20 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         findViewById(R.id.sections_content) as ViewGroup
     }
     private var currentContainer: Container<*, *>? = null
+    private var currentView: Int = VIEW_HABITS
 
+    // TODO: transparent status bar
+    // TODO: BottomNavigationView items' colors do not change
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // TODO: transparent status bar
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
-        bottomNavigationView.selectedItemId = R.id.action_habits
-        // TODO: BottomNavigationView items' colors do not change
+        currentView = savedInstanceState?.getInt(ARG_CURRENT_VIEW, VIEW_HABITS) ?: VIEW_HABITS
+        showSelectedView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        outState?.putInt(ARG_CURRENT_VIEW, currentView)
     }
 
     override fun onDestroy() {
@@ -47,15 +60,13 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         finishContainer()
     }
 
-    override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
-        super.onRestoreInstanceState(savedInstanceState)
-        showCurrentView()
-    }
-
-    private fun showCurrentView() {
-        val currentItemId = bottomNavigationView.selectedItemId
-        val currentItem = bottomNavigationView.menu.findItem(currentItemId)
-        onNavigationItemSelected(currentItem)
+    private fun showSelectedView() {
+        val itemId = when (currentView) {
+            VIEW_ASSISTANT -> R.id.action_assistant
+            VIEW_HABITS -> R.id.action_habits
+            else -> R.id.action_statistics
+        }
+        bottomNavigationView.selectedItemId = itemId
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean = when (item.itemId) {
@@ -85,18 +96,21 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
     }
 
     private fun showAssistant() {
+        currentView = VIEW_ASSISTANT
         val view = AssistantView(this)
         showView(view)
 //        initContainer(AssistantContainer(view)) // TODO:
     }
 
     private fun showHabits() {
+        currentView = VIEW_HABITS
         val view = HabitsView(this)
         showView(view)
         initContainer(HabitsContainer(view))
     }
 
     private fun showStatistics() {
+        currentView = VIEW_STATISTICS
         val view = StatisticsView(this)
         showView(view)
 //        initContainer(StatisticsContainer(view)) // TODO:
