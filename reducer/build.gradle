@@ -7,8 +7,8 @@ android {
     defaultConfig {
         minSdkVersion minSdk
         targetSdkVersion targetSdk
-        versionCode majorAppVersion * 10000 + minorAppVersion * 1000 + patchAppVersion * 100 + buildAppVersion
-        versionName "${majorAppVersion}.${minorAppVersion}.${patchAppVersion}"
+        versionCode versionCodeNumber
+        versionName versionNameString
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -64,6 +64,7 @@ dependencies {
     compile project(":common")
     compile project(":entity")
     compile project(":model")
+    compile project(":arch")
 
     // JUnit testing dependencies
     testCompile "junit:junit:${junitVersion}"

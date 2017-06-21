@@ -1,1 +1,1 @@
-include ':view', ':entity', ':common', ':controller', ':reducer', ':model'
+include ':app', ':entity', ':common', ':controller', ':reducer', ':model', ':view', ':arch'

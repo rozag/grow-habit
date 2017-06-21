@@ -7,6 +7,13 @@ buildscript {
         patchAppVersion = 0
         buildAppVersion = 0
 
+        // Version code and version name
+        versionCodeNumber = majorAppVersion * 10000 +
+                minorAppVersion * 1000 +
+                patchAppVersion * 100 +
+                buildAppVersion
+        versionNameString = "${majorAppVersion}.${minorAppVersion}.${patchAppVersion}"
+
         // Build tools, SDKs, etc.
         gradleClasspathVersion = "2.3.2"
         buildTools = "26.0.0"
