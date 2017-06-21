@@ -1,3 +1,3 @@
 package com.vsrstudio.arch
 
-interface UserAction
+interface Action

@@ -12,8 +12,7 @@ import com.vsrstudio.view.AssistantView
 import com.vsrstudio.view.HabitsView
 import com.vsrstudio.view.StatisticsView
 
-class SectionsActivity : BaseActivity(),
-        BottomNavigationView.OnNavigationItemSelectedListener {
+class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSelectedListener {
 
     companion object {
         fun makeIntent(context: Context): Intent {
