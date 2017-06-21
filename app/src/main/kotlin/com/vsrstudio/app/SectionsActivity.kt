@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import com.vsrstudio.arch.Container
 import com.vsrstudio.view.AssistantView
 import com.vsrstudio.view.HabitsView
 import com.vsrstudio.view.StatisticsView
@@ -32,6 +33,7 @@ class SectionsActivity : BaseActivity(),
     private val contentLayout: ViewGroup by lazy {
         findViewById(R.id.sections_content) as ViewGroup
     }
+    private var currentContainer: Container<*, *>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +45,7 @@ class SectionsActivity : BaseActivity(),
 
     override fun onDestroy() {
         super.onDestroy()
-        // TODO: handle containers
+        finishContainer()
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle?) {
@@ -73,19 +75,32 @@ class SectionsActivity : BaseActivity(),
         else -> false
     }
 
+    private fun initContainer(container: Container<*, *>) {
+        finishContainer()
+        currentContainer = container
+        container.init()
+    }
+
+    private fun finishContainer() {
+        currentContainer?.finish()
+    }
+
     private fun showAssistant() {
-        // TODO: DI container
-        showView(AssistantView(this))
+        val view = AssistantView(this)
+        showView(view)
+//        initContainer(AssistantContainer(view)) // TODO:
     }
 
     private fun showHabits() {
-        // TODO: DI container
-        showView(HabitsView(this))
+        val view = HabitsView(this)
+        showView(view)
+        initContainer(HabitsContainer(view))
     }
 
     private fun showStatistics() {
-        // TODO: DI container
-        showView(StatisticsView(this))
+        val view = StatisticsView(this)
+        showView(view)
+//        initContainer(StatisticsContainer(view)) // TODO:
     }
 
     private fun showView(view: View) {
