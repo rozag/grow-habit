@@ -32,10 +32,10 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
     override val displayHomeAsUp = false
     override val homeButtonEnabled = false
 
-    private val bottomNavigationView by lazy {
+    private val bottomNavigationView by lazy(LazyThreadSafetyMode.NONE) {
         findViewById(R.id.sections_bottom_navigation_view) as BottomNavigationView
     }
-    private val contentLayout: ViewGroup by lazy {
+    private val contentLayout: ViewGroup by lazy(LazyThreadSafetyMode.NONE) {
         findViewById(R.id.sections_content) as ViewGroup
     }
     private var currentContainer: Container<*, *>? = null
@@ -106,7 +106,7 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         currentView = VIEW_HABITS
         val view = HabitsView(this)
         showView(view)
-        initContainer(HabitsContainer(view))
+        initContainer(HabitsContainer(App.instance.appContainer, view))
     }
 
     private fun showStatistics() {

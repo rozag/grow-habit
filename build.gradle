@@ -28,6 +28,7 @@ buildscript {
         // Testing libraries
         junitVersion = "4.12"
         mockitoVersion = "1.10.19"
+        mockitoKotlinVersion = "1.5.0"
         espressoVersion = "2.2.2"
 
         // Kotlin version
@@ -45,7 +46,6 @@ buildscript {
     }
     repositories {
         jcenter()
-        mavenCentral()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:${gradleClasspathVersion}"
@@ -56,7 +56,6 @@ buildscript {
 allprojects {
     repositories {
         jcenter()
-        mavenCentral()
     }
 }
 

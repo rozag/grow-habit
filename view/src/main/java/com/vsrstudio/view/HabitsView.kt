@@ -30,4 +30,8 @@ class HabitsView(context: Context?) :
         return Observable.empty()
     }
 
+    override fun stopEmittingActions() {
+        // TODO
+    }
+
 }

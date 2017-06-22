@@ -1,4 +1,9 @@
 package com.vsrstudio.app
 
-class AppContainer {
+import android.content.Context
+import com.vsrstudio.model.HabitsRepo
+import com.vsrstudio.model.HabitsSqliteRepo
+
+class AppContainer(val context: Context) {
+    val habitsRepo: HabitsRepo<*> = HabitsSqliteRepo()
 }

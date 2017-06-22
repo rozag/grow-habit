@@ -7,10 +7,11 @@ import com.vsrstudio.entity.useraction.HabitsAction
 import com.vsrstudio.entity.viewstate.HabitsViewState
 import com.vsrstudio.reducer.HabitsReducer
 
-class HabitsContainer(val view: ArchView<HabitsViewState, HabitsAction>) :
+class HabitsContainer(appContainer: AppContainer,
+                      val view: ArchView<HabitsViewState, HabitsAction>) :
         Container<HabitsViewState, HabitsAction> {
 
-    val controller: HabitsController = HabitsController()
+    val controller: HabitsController = HabitsController(appContainer.habitsRepo)
     val reducer: HabitsReducer = HabitsReducer()
 
     override fun init() {
@@ -20,7 +21,7 @@ class HabitsContainer(val view: ArchView<HabitsViewState, HabitsAction>) :
 
     override fun finish() {
         reducer.unsubscribeFromModel()
-        controller.unsubscribeFromActions()
+        view.stopEmittingActions()
         view.unsubscribeFromViewState()
     }
 

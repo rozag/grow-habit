@@ -1,16 +1,17 @@
 package com.vsrstudio.app
 
+import android.app.Application
 import com.vsrstudio.common.crash.StubCrashProvider
 import com.vsrstudio.common.logging.ReleaseTree
 import timber.log.Timber
 
-class App : android.app.Application() {
+class App : Application() {
 
     companion object Instance {
         lateinit var instance: App
     }
 
-    val appContainer: AppContainer = AppContainer()
+    val appContainer: AppContainer = AppContainer(applicationContext)
 
     override fun onCreate() {
         super.onCreate()

@@ -69,6 +69,7 @@ dependencies {
     // JUnit testing dependencies
     testCompile "junit:junit:${junitVersion}"
     testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    testCompile "com.nhaarman:mockito-kotlin-kt1.1:${mockitoKotlinVersion}"
 
     // Android testing dependencies
     androidTestCompile "junit:junit:4.12"
