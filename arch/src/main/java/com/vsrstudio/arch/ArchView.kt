@@ -2,9 +2,9 @@ package com.vsrstudio.arch
 
 import io.reactivex.Observable
 
-interface ArchView<S : ViewState, A : Action> {
-    fun subscribeOnViewState(observable: Observable<S>)
+interface ArchView<St : ViewState, Act : Action> {
+    fun subscribeOnViewState(observable: Observable<St>)
     fun unsubscribeFromViewState()
-    fun observeActions(): Observable<A>
+    fun observeActions(): Observable<Act>
     fun stopEmittingActions()
 }

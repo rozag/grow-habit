@@ -38,7 +38,7 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
     private val contentLayout: ViewGroup by lazy(LazyThreadSafetyMode.NONE) {
         findViewById(R.id.sections_content) as ViewGroup
     }
-    private var currentContainer: Container<*, *>? = null
+    private var currentContainer: Container? = null
     private var currentView: Int = VIEW_HABITS
 
     // TODO: transparent status bar
@@ -85,7 +85,7 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         else -> false
     }
 
-    private fun initContainer(container: Container<*, *>) {
+    private fun initContainer(container: Container) {
         finishContainer()
         currentContainer = container
         container.init()

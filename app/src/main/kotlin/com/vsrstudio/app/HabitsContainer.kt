@@ -8,8 +8,7 @@ import com.vsrstudio.entity.viewstate.HabitsViewState
 import com.vsrstudio.reducer.HabitsReducer
 
 class HabitsContainer(appContainer: AppContainer,
-                      val view: ArchView<HabitsViewState, HabitsAction>) :
-        Container<HabitsViewState, HabitsAction> {
+                      val view: ArchView<HabitsViewState, HabitsAction>) : Container {
 
     val controller: HabitsController = HabitsController(appContainer.habitsRepo)
     val reducer: HabitsReducer = HabitsReducer()

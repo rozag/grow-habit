@@ -1,5 +1,5 @@
 package com.vsrstudio.arch
 
-interface Query<out T, in D> {
-    fun query(storage: D) : List<T>
+interface Query<out Tp, in Strg> {
+    fun query(storage: Strg) : List<Tp>
 }

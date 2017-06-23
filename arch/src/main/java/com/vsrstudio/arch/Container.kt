@@ -1,6 +1,6 @@
 package com.vsrstudio.arch
 
-interface Container<S : ViewState, A : Action> {
+interface Container {
     fun init()
     fun finish()
 }
