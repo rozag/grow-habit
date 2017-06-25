@@ -106,7 +106,7 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         currentView = VIEW_HABITS
         val view = HabitsView(this)
         showView(view)
-        initContainer(HabitsContainer(App.instance.appContainer, view))
+        initContainer(HabitsContainer(App.appContainer, view))
     }
 
     private fun showStatistics() {

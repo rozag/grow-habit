@@ -9,12 +9,13 @@ class App : Application() {
 
     companion object Instance {
         lateinit var instance: App
+        lateinit var appContainer: AppContainer
     }
-
-    val appContainer: AppContainer = AppContainer(applicationContext)
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
+        appContainer = AppContainer(applicationContext)
         initTimber()
     }
 

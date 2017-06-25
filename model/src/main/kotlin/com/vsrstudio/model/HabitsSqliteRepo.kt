@@ -3,8 +3,8 @@ package com.vsrstudio.model
 import com.vsrstudio.entity.domain.Habit
 import io.reactivex.Observable
 
-class HabitsSqliteRepo : HabitsRepo<HabitsSqliteQuery>,
-        SqliteRepo<Habit, HabitsSqliteQuery> {
+class HabitsSqliteRepo : HabitsRepo<HabitsSqliteQuery>, SqliteRepo<Habit, HabitsSqliteQuery> {
+
     override fun add(item: Habit) {
         // TODO
     }
@@ -23,6 +23,7 @@ class HabitsSqliteRepo : HabitsRepo<HabitsSqliteQuery>,
 
     override fun query(spec: HabitsSqliteQuery): Observable<List<Habit>> {
         // TODO
-        TODO()
+        return Observable.empty()
     }
+
 }

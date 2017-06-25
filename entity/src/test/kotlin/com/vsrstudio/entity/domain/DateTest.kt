@@ -1,7 +1,6 @@
 package com.vsrstudio.entity.domain
 
-import com.vsrstudio.entity.domain.Date
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class DateTest {

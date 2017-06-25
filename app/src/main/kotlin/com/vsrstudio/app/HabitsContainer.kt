@@ -11,7 +11,7 @@ class HabitsContainer(appContainer: AppContainer,
                       val view: ArchView<HabitsViewState, HabitsAction>) : Container {
 
     val controller: HabitsController = HabitsController(appContainer.habitsRepo)
-    val reducer: HabitsReducer = HabitsReducer()
+    val reducer: HabitsReducer = HabitsReducer(appContainer.habitsRepo)
 
     override fun init() {
         controller.subscribeOnActions(view.observeActions())
