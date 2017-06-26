@@ -17,9 +17,9 @@ import org.junit.Test
 class HabitsReducerTest {
 
     private val habits = listOf(
-            Habit(Id("id_1"), Title("title_1"), mapOf()),
-            Habit(Id("id_2"), Title("title_2"), mapOf()),
-            Habit(Id("id_3"), Title("title_3"), mapOf())
+            Habit(Id("id_1"), Title("title_1"), listOf(), 0),
+            Habit(Id("id_2"), Title("title_2"), listOf(), 1),
+            Habit(Id("id_3"), Title("title_3"), listOf(), 2)
     )
     private val subject: Subject<List<Habit>> = PublishSubject.create()
     private val repo = object : Repo<Habit, Query<Habit, *>, Update<Habit, *>> {

@@ -36,7 +36,7 @@ class HabitsControllerTest {
 
     @Test
     fun habitCompletionChanged_repoUpdateCalled() {
-        val changedHabit = Habit(Id("id"), Title("title"), mapOf())
+        val changedHabit = Habit(Id("id"), Title("title"), listOf(), 0)
         val newCompletion = Completion(
                 Id("completion_id"),
                 changedHabit.id,
@@ -51,21 +51,21 @@ class HabitsControllerTest {
     @Test
     fun habitAdded_repoAddCalled() {
         val newHabitTitle = Title("title")
-        subject.onNext(HabitAddedAction(newHabitTitle))
-        val expectedHabit = Habit(Id("test_id"), newHabitTitle, mapOf())
+        subject.onNext(HabitAddedAction(newHabitTitle, 0))
+        val expectedHabit = Habit(Id("test_id"), newHabitTitle, listOf(), 0)
         verify(repo, times(1)).add(expectedHabit)
     }
 
     @Test
     fun habitRemoved_repoRemoveCalled() {
-        val removedHabit = Habit(Id("id"), Title("title"), mapOf())
+        val removedHabit = Habit(Id("id"), Title("title"), listOf(), 0)
         subject.onNext(HabitRemovedAction(removedHabit))
         verify(repo, times(1)).remove(removedHabit)
     }
 
     @Test
     fun habitRenamed_repoUpdateCalled() {
-        val renamedHabit = Habit(Id("id"), Title("old_title"), mapOf())
+        val renamedHabit = Habit(Id("id"), Title("old_title"), listOf(), 0)
         val newTitle = Title("new_title")
         subject.onNext(HabitRenamedAction(renamedHabit, newTitle))
         val expectedHabit = renamedHabit.rename(newTitle)
