@@ -1,9 +1,13 @@
 package com.vsrstudio.model
 
+import android.database.sqlite.SQLiteDatabase
+import com.vsrstudio.arch.Query
+import com.vsrstudio.arch.Repo
+import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import io.reactivex.Observable
 
-class HabitsSqliteRepo : HabitsRepo<HabitsSqliteQuery>, SqliteRepo<Habit, HabitsSqliteQuery> {
+class HabitsSqliteRepo : Repo<Habit, Query<Habit, SQLiteDatabase>, Update<Habit, SQLiteDatabase>> {
 
     override fun add(item: Habit) {
         // TODO
@@ -17,11 +21,15 @@ class HabitsSqliteRepo : HabitsRepo<HabitsSqliteQuery>, SqliteRepo<Habit, Habits
         // TODO
     }
 
+    override fun update(items: Iterable<Habit>, update: Update<Habit, SQLiteDatabase>) {
+        // TODO
+    }
+
     override fun remove(item: Habit) {
         // TODO
     }
 
-    override fun query(spec: HabitsSqliteQuery): Observable<List<Habit>> {
+    override fun query(query: Query<Habit, SQLiteDatabase>): Observable<List<Habit>> {
         // TODO
         return Observable.empty()
     }

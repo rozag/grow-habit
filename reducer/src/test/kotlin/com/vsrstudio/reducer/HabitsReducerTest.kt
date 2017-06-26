@@ -1,17 +1,17 @@
 package com.vsrstudio.reducer
 
+import com.vsrstudio.arch.Query
+import com.vsrstudio.arch.Repo
+import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.entity.domain.Id
 import com.vsrstudio.entity.domain.Title
 import com.vsrstudio.entity.viewstate.HabitsViewState
-import com.vsrstudio.model.HabitsQuery
-import com.vsrstudio.model.HabitsRepo
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
 import junit.framework.Assert.assertEquals
 import org.junit.After
-import org.junit.Before
 import org.junit.Test
 
 class HabitsReducerTest {
@@ -22,20 +22,15 @@ class HabitsReducerTest {
             Habit(Id("id_3"), Title("title_3"), mapOf())
     )
     private val subject: Subject<List<Habit>> = PublishSubject.create()
-    private val repo = object : HabitsRepo<HabitsQuery<*>> {
+    private val repo = object : Repo<Habit, Query<Habit, *>, Update<Habit, *>> {
         override fun add(item: Habit) = Unit
         override fun add(items: Iterable<Habit>) = Unit
         override fun update(item: Habit) = Unit
+        override fun update(items: Iterable<Habit>, update: Update<Habit, *>) = Unit
         override fun remove(item: Habit) = Unit
-        override fun query(spec: HabitsQuery<*>): Observable<List<Habit>> {
-            return subject
-        }
+        override fun query(query: Query<Habit, *>): Observable<List<Habit>> = subject
     }
     private val reducer = HabitsReducer(repo)
-
-    @Before
-    fun setUp() {
-    }
 
     @After
     fun tearDown() {

@@ -1,9 +1,9 @@
 package com.vsrstudio.controller
 
 import com.nhaarman.mockito_kotlin.verify
+import com.vsrstudio.arch.Repo
 import com.vsrstudio.entity.domain.*
 import com.vsrstudio.entity.useraction.*
-import com.vsrstudio.model.HabitsRepo
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.PublishSubject
 import io.reactivex.subjects.Subject
@@ -16,7 +16,8 @@ import org.mockito.Mockito.times
 class HabitsControllerTest {
 
     private val subject: Subject<HabitsAction> = PublishSubject.create()
-    private val repo = mock(HabitsRepo::class.java)
+    @Suppress("UNCHECKED_CAST")
+    private val repo = mock(Repo::class.java) as Repo<Habit, *, *>
     private val controller = HabitsController(repo, Schedulers.trampoline())
 
     @Before
