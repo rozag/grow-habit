@@ -20,28 +20,25 @@ class HabitsSqliteOpenHelper(context: Context) :
             val completionSync = "completion_sync"
         }
 
-        object Habit {
+        object HabitEntry {
             val id = "id"
             val title = "title"
-            val created = "created"
-            val updated = "updated"
+            val position = "position"
         }
 
-        object Completion {
+        object CompletionEntry {
             val id = "id"
             val habitId = "habit_id"
             val status = "status"
             val date = "date"
-            val created = "created"
-            val updated = "updated"
         }
 
-        object HabitSync {
+        object HabitSyncEntry {
             val habitId = "habit_id"
             val synced = "synced"
         }
 
-        object CompletionSync {
+        object CompletionSyncEntry {
             val completionId = "completion_id"
             val synced = "synced"
         }
@@ -49,33 +46,30 @@ class HabitsSqliteOpenHelper(context: Context) :
 
     override fun onCreate(db: SQLiteDatabase?) {
         db?.execSQL("CREATE TABLE ${Table.habit} (" +
-                "${Habit.id} TEXT NOT NULL CHECK(${Habit.id} != ''), " +
-                "${Habit.title} TEXT NOT NULL CHECK(${Habit.title} != ''), " +
-                "${Habit.created} INTEGER NOT NULL CHECK(${Habit.created} > 0), " +
-                "${Habit.updated} INTEGER NOT NULL CHECK(${Habit.updated} > 0), " +
-                "PRIMARY KEY(${Habit.id})" +
+                "${HabitEntry.id} TEXT NOT NULL CHECK(${HabitEntry.id} != ''), " +
+                "${HabitEntry.title} TEXT NOT NULL CHECK(${HabitEntry.title} != ''), " +
+                "${HabitEntry.position} INTEGER NOT NULL CHECK(${HabitEntry.position} >= 0), " +
+                "PRIMARY KEY(${HabitEntry.id})" +
                 ");")
         db?.execSQL("CREATE TABLE ${Table.habitSync} (" +
-                "${HabitSync.habitId} TEXT NOT NULL CHECK(${HabitSync.habitId} != ''), " +
-                "${HabitSync.synced} INTEGER NOT NULL CHECK(${HabitSync.synced}>=0 AND ${HabitSync.synced}<=1), " +
-                "PRIMARY KEY(${HabitSync.habitId}), " +
-                "FOREIGN KEY(${HabitSync.habitId}) REFERENCES ${Table.habit}(${Habit.id})" +
+                "${HabitSyncEntry.habitId} TEXT NOT NULL CHECK(${HabitSyncEntry.habitId} != ''), " +
+                "${HabitSyncEntry.synced} INTEGER NOT NULL CHECK(${HabitSyncEntry.synced}>=0 AND ${HabitSyncEntry.synced}<=1), " +
+                "PRIMARY KEY(${HabitSyncEntry.habitId}), " +
+                "FOREIGN KEY(${HabitSyncEntry.habitId}) REFERENCES ${Table.habit}(${HabitEntry.id})" +
                 ");")
         db?.execSQL("CREATE TABLE ${Table.completion} (" +
-                "${Completion.id} TEXT NOT NULL CHECK(${Completion.id} != ''), " +
-                "${Completion.habitId} TEXT NOT NULL CHECK(${Completion.habitId} != ''), " +
-                "${Completion.status} INTEGER NOT NULL CHECK(${Completion.status}>=0 AND ${Completion.status}<=3), " +
-                "${Completion.date} INTEGER NOT NULL CHECK(${Completion.date} > 0), " +
-                "${Completion.created} INTEGER NOT NULL CHECK(${Completion.created} > 0), " +
-                "${Completion.updated} INTEGER NOT NULL CHECK(${Completion.updated} > 0), " +
-                "PRIMARY KEY(${Completion.id}), " +
-                "FOREIGN KEY(${Completion.habitId}) REFERENCES ${Table.habit}(${Habit.id})" +
+                "${CompletionEntry.id} TEXT NOT NULL CHECK(${CompletionEntry.id} != ''), " +
+                "${CompletionEntry.habitId} TEXT NOT NULL CHECK(${CompletionEntry.habitId} != ''), " +
+                "${CompletionEntry.status} INTEGER NOT NULL CHECK(${CompletionEntry.status}>=0 AND ${CompletionEntry.status}<=3), " +
+                "${CompletionEntry.date} INTEGER NOT NULL CHECK(${CompletionEntry.date} > 0), " +
+                "PRIMARY KEY(${CompletionEntry.id}), " +
+                "FOREIGN KEY(${CompletionEntry.habitId}) REFERENCES ${Table.habit}(${HabitEntry.id})" +
                 ");")
         db?.execSQL("CREATE TABLE ${Table.completionSync} (" +
-                "${CompletionSync.completionId} TEXT NOT NULL CHECK(${CompletionSync.completionId} != ''), " +
-                "${CompletionSync.synced} INTEGER NOT NULL CHECK(${CompletionSync.synced}>=0 AND ${CompletionSync.synced}<=1), " +
-                "PRIMARY KEY(${CompletionSync.completionId}), " +
-                "FOREIGN KEY(${CompletionSync.completionId}) REFERENCES ${Table.completion}(${Completion.id}) "+
+                "${CompletionSyncEntry.completionId} TEXT NOT NULL CHECK(${CompletionSyncEntry.completionId} != ''), " +
+                "${CompletionSyncEntry.synced} INTEGER NOT NULL CHECK(${CompletionSyncEntry.synced}>=0 AND ${CompletionSyncEntry.synced}<=1), " +
+                "PRIMARY KEY(${CompletionSyncEntry.completionId}), " +
+                "FOREIGN KEY(${CompletionSyncEntry.completionId}) REFERENCES ${Table.completion}(${CompletionEntry.id}) "+
                 ");")
     }
 

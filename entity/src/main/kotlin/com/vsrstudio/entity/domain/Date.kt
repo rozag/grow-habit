@@ -7,7 +7,7 @@ data class Date(val seconds: Long) {
 
     companion object {
         fun current(): Date {
-            val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+            val calendar = Calendar.getInstance()
             calendar.set(
                     calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH),

@@ -1,5 +1,6 @@
-package com.vsrstudio.model
+package com.vsrstudio.app
 
+import com.vsrstudio.arch.IdGenerator
 import java.util.*
 
 /**
@@ -18,7 +19,7 @@ import java.util.*
  *    latter ones will sort after the former ones.  We do this by using the previous random bits
  *    but "incrementing" them by 1 (only in the case of a timestamp collision).
  */
-class FirebaseIdGenerator {
+class FirebaseIdGenerator : IdGenerator {
 
     data class State(
             // Timestamp of last push, used to prevent local collisions if you push twice in one ms.
@@ -108,5 +109,7 @@ class FirebaseIdGenerator {
             else -> op()
         }
     }
+
+    override fun generate(): String = generateId()
 
 }

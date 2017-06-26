@@ -1,6 +1,7 @@
 package com.vsrstudio.controller
 
 import com.nhaarman.mockito_kotlin.verify
+import com.vsrstudio.arch.IdGenerator
 import com.vsrstudio.arch.Repo
 import com.vsrstudio.entity.domain.*
 import com.vsrstudio.entity.useraction.*
@@ -18,7 +19,10 @@ class HabitsControllerTest {
     private val subject: Subject<HabitsAction> = PublishSubject.create()
     @Suppress("UNCHECKED_CAST")
     private val repo = mock(Repo::class.java) as Repo<Habit, *, *>
-    private val controller = HabitsController(repo, Schedulers.trampoline())
+    private val idGenerator = object : IdGenerator {
+        override fun generate(): String = "test_id"
+    }
+    private val controller = HabitsController(repo, idGenerator, Schedulers.trampoline())
 
     @Before
     fun setUp() {
@@ -33,9 +37,14 @@ class HabitsControllerTest {
     @Test
     fun habitCompletionChanged_repoUpdateCalled() {
         val changedHabit = Habit(Id("id"), Title("title"), mapOf())
-        val newCompletion = Completion.EMPTY
+        val newCompletion = Completion(
+                Id("completion_id"),
+                changedHabit.id,
+                Completion.Status.EMPTY,
+                Date.current()
+        )
         subject.onNext(HabitCompletionChangedAction(changedHabit, newCompletion))
-        val expectedHabit = changedHabit.addCompletion(Date.current(), newCompletion)
+        val expectedHabit = changedHabit.addCompletion(newCompletion)
         verify(repo, times(1)).update(expectedHabit)
     }
 
@@ -43,7 +52,7 @@ class HabitsControllerTest {
     fun habitAdded_repoAddCalled() {
         val newHabitTitle = Title("title")
         subject.onNext(HabitAddedAction(newHabitTitle))
-        val expectedHabit = Habit(Id.EMPTY, newHabitTitle, mapOf())
+        val expectedHabit = Habit(Id("test_id"), newHabitTitle, mapOf())
         verify(repo, times(1)).add(expectedHabit)
     }
 

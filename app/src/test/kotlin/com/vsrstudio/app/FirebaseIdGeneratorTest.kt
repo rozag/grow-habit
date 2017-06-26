@@ -1,4 +1,4 @@
-package com.vsrstudio.model
+package com.vsrstudio.app
 
 import org.hamcrest.core.IsEqual.equalTo
 import org.junit.Assert.assertNotEquals

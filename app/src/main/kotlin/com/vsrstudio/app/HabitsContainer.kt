@@ -10,7 +10,7 @@ import com.vsrstudio.reducer.HabitsReducer
 class HabitsContainer(appContainer: AppContainer,
                       val view: ArchView<HabitsViewState, HabitsAction>) : Container {
 
-    val controller: HabitsController = HabitsController(appContainer.habitsRepo)
+    val controller: HabitsController = HabitsController(appContainer.habitsRepo, appContainer.idGenerator)
     val reducer: HabitsReducer = HabitsReducer(appContainer.habitsRepo)
 
     override fun init() {
