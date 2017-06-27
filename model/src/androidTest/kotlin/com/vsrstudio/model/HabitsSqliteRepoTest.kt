@@ -18,6 +18,7 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
+// TODO: test observer notified after updates
 class HabitsSqliteRepoTest {
 
     private val completionToContentValuesMapper = CompletionToContentValuesMapper()
@@ -83,6 +84,10 @@ class HabitsSqliteRepoTest {
 
     @Test
     fun removeSingleHabit_habitRemoved() {
+        val habit = generateHabit()
+        addHabits(listOf(habit))
+        repo.remove(habit)
+        assertEquals(listOf<Habit>(), queryAllHabits())
     }
 
     @Test

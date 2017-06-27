@@ -41,8 +41,19 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         updatedItems.forEach { habit -> updateHabitWithWritableDb(habit, writableDb) }
     }
 
-    override fun remove(itemToRemove: Habit) {
-        // TODO
+    override fun remove(itemToRemove: Habit) = applyToWritableDb { writableDb ->
+        itemToRemove.completions.forEach { completion ->
+            writableDb.delete(
+                    Table.completion,
+                    "${CompletionEntry.id} = ?",
+                    arrayOf(completion.id.value)
+            )
+        }
+        writableDb.delete(
+                Table.habit,
+                "${HabitEntry.id} = ?",
+                arrayOf(itemToRemove.id.value)
+        )
     }
 
     override fun query(query: Query<Habit, SQLiteDatabase>): Observable<List<Habit>> {
