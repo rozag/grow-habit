@@ -4,7 +4,6 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.support.test.InstrumentationRegistry
-import android.util.Log
 import com.vsrstudio.entity.domain.*
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.CompletionEntry
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.DatabaseInfo
@@ -65,6 +64,19 @@ class HabitsSqliteRepoTest {
 
     @Test
     fun updateSingleHabit_habitUpdated() {
+        val oldIndex = 0
+        val habit = generateHabit(oldIndex)
+        addHabits(listOf(habit))
+        val newIndex = 1
+        val newTitle = generateHabitTitle(newIndex)
+        val newPosition = habit.position + 1
+        val newCompletionId = generateCompletionId(habit.completions.size, newIndex)
+        val newCompletion = generateCompletion(newCompletionId, habit.id)
+        val updatedHabit = habit.rename(newTitle)
+                .addCompletion(newCompletion)
+                .changePosition(newPosition)
+        repo.update(updatedHabit)
+        assertEquals(listOf(updatedHabit), queryAllHabits())
     }
 
     @Test
@@ -107,7 +119,6 @@ class HabitsSqliteRepoTest {
                 null
         )
         val habitsIdsSelection = buildHabitsIdsSelectionString(habitsCursor)
-        Log.d("TEST", "habits ids: $habitsIdsSelection")
         val completionsCursor = readableDb.rawQuery(
                 "SELECT * " +
                         "FROM ${Table.completion} " +
@@ -117,7 +128,6 @@ class HabitsSqliteRepoTest {
         val completions = completionFromCursorMapper.batchMap(completionsCursor)
         completionsCursor.close()
         val habitIdToCompletionListMap = buildHabitIdToCompletionsListMapping(completions)
-        Log.d("TEST", "cursor count: ${habitsCursor.count}")
         val habits = habitFromCursorMapper.batchMap(habitsCursor, habitIdToCompletionListMap)
         habitsCursor.close()
         return habits

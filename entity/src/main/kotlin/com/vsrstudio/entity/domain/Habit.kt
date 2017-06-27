@@ -12,6 +12,13 @@ data class Habit(val id: Id, val title: Title, val completions: List<Completion>
             position
     )
 
+    fun changePosition(newPosition: Int) = Habit(
+            id,
+            title,
+            completions,
+            newPosition
+    )
+
     override fun compareTo(other: Habit): Int = when {
         position < other.position -> -1
         position == other.position -> 0

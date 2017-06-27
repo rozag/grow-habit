@@ -5,6 +5,8 @@ import com.vsrstudio.arch.Query
 import com.vsrstudio.arch.Repo
 import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
+import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.CompletionEntry
+import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.HabitEntry
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.Table
 import com.vsrstudio.model.mapper.CompletionFromCursorMapper
 import com.vsrstudio.model.mapper.CompletionToContentValuesMapper
@@ -32,8 +34,31 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         // TODO add completions sync data
     }
 
-    override fun update(item: Habit) {
-        // TODO
+    override fun update(item: Habit) = applyToWritableDb { writableDb ->
+        val habitCv = habitToContentValuesMapper.map(item)
+        writableDb.update(
+                Table.habit,
+                habitCv,
+                "${HabitEntry.id} = ?",
+                arrayOf(item.id.value)
+        )
+        item.completions.map { completion ->
+            val completionCv = completionToContentValuesMapper.map(completion)
+            val insertResult = writableDb.insertWithOnConflict(
+                    Table.completion,
+                    null,
+                    completionCv,
+                    SQLiteDatabase.CONFLICT_IGNORE
+            )
+            if (insertResult == -1L) {
+                writableDb.update(
+                        Table.completion,
+                        completionCv,
+                        "${CompletionEntry.id} = ?",
+                        arrayOf(completion.id.value)
+                )
+            }
+        }
     }
 
     override fun update(items: List<Habit>, update: Update<Habit, SQLiteDatabase>) {
