@@ -61,21 +61,21 @@ android {
 
 dependencies {
     // JUnit testing dependencies
-    testCompile "junit:junit:${junitVersion}"
-    testCompile "org.mockito:mockito-core:${mockitoVersion}"
+    testImplementation "junit:junit:${junitVersion}"
+    testImplementation "org.mockito:mockito-core:${mockitoVersion}"
 
     // Android testing dependencies
-    androidTestCompile "junit:junit:4.12"
-    androidTestCompile("com.android.support.test.espresso:espresso-core:${espressoVersion}", {
+    androidTestImplementation "junit:junit:4.12"
+    androidTestImplementation("com.android.support.test.espresso:espresso-core:${espressoVersion}", {
         exclude group: "com.android.support", module: "support-annotations"
     })
 
     // Timber logging library
-    compile "com.jakewharton.timber:timber:${timberVersion}"
+    api "com.jakewharton.timber:timber:${timberVersion}"
 
     // Kotlin specific dependencies
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:${kotlinVersion}"
 
     // Android support library
-    compile "com.android.support:appcompat-v7:${supportLibraryVersion}"
+    implementation "com.android.support:appcompat-v7:${supportLibraryVersion}"
 }

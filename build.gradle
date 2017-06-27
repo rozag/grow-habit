@@ -15,7 +15,7 @@ buildscript {
         versionNameString = "${majorAppVersion}.${minorAppVersion}.${patchAppVersion}"
 
         // Build tools, SDKs, etc.
-        gradleClasspathVersion = "2.3.2"
+        gradleClasspathVersion = "3.0.0-alpha4"
         buildTools = "26.0.0"
         minSdk = 21
         compileSdk = 25
