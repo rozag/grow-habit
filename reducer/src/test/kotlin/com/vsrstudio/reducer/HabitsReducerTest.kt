@@ -24,9 +24,9 @@ class HabitsReducerTest {
     private val subject: Subject<List<Habit>> = PublishSubject.create()
     private val repo = object : Repo<Habit, Query<Habit, *>, Update<Habit, *>> {
         override fun add(item: Habit) = Unit
-        override fun add(items: Iterable<Habit>) = Unit
+        override fun add(items: List<Habit>) = Unit
         override fun update(item: Habit) = Unit
-        override fun update(items: Iterable<Habit>, update: Update<Habit, *>) = Unit
+        override fun update(items: List<Habit>, update: Update<Habit, *>) = Unit
         override fun remove(item: Habit) = Unit
         override fun query(query: Query<Habit, *>): Observable<List<Habit>> = subject
     }

@@ -23,25 +23,20 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
     private val writableDb: SQLiteDatabase = dbOpenHelper.writableDatabase
 
     override fun add(item: Habit) = applyToWritableDb { writableDb ->
-        // TODO add habit sync data
-        // TODO add completions sync data
-        val habitCv = habitToContentValuesMapper.map(item)
-        writableDb.insert(Table.habit, null, habitCv)
-        val completionsContentValues = completionToContentValuesMapper.batchMap(item.completions)
-        completionsContentValues.forEach { completionCv ->
-            writableDb.insert(Table.completion, null, completionCv)
-        }
+        addHabitToWritableDb(item, writableDb)
     }
 
-    override fun add(items: Iterable<Habit>) {
-        // TODO
+    override fun add(items: List<Habit>) = applyToWritableDb { writableDb ->
+        items.map { habit -> addHabitToWritableDb(habit, writableDb) }
+        // TODO add habit sync data
+        // TODO add completions sync data
     }
 
     override fun update(item: Habit) {
         // TODO
     }
 
-    override fun update(items: Iterable<Habit>, update: Update<Habit, SQLiteDatabase>) {
+    override fun update(items: List<Habit>, update: Update<Habit, SQLiteDatabase>) {
         // TODO
     }
 
@@ -52,6 +47,15 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
     override fun query(query: Query<Habit, SQLiteDatabase>): Observable<List<Habit>> {
         // TODO
         return Observable.empty()
+    }
+
+    private fun addHabitToWritableDb(habit: Habit, writableDb: SQLiteDatabase) {
+        val habitCv = habitToContentValuesMapper.map(habit)
+        writableDb.insert(Table.habit, null, habitCv)
+        val completionsContentValues = completionToContentValuesMapper.batchMap(habit.completions)
+        completionsContentValues.forEach { completionCv ->
+            writableDb.insert(Table.completion, null, completionCv)
+        }
     }
 
     private fun applyToWritableDb(func: (SQLiteDatabase) -> Unit) {

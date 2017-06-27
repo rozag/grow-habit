@@ -69,6 +69,45 @@ class HabitsSqliteRepoTest {
 
     @Test
     fun addMultipleHabits_habitsAdded() {
+        fun generateHabitId(index: Int): Id = Id("habit_id_$index")
+        fun generateHabitTitle(index: Int): Title = Title("habit_title_$index")
+        fun generateCompletionId(index: Int, postfix: Int): Id = Id("completion_id_${postfix}_$index")
+
+        fun randomLongFromInterval(begin: Long, end: Long): Long {
+            val range = end - begin + 1
+            return (Math.random() * range).toLong() + begin
+        }
+
+        fun generateCompletion(id: Id, habitId: Id): Completion {
+            return Completion(
+                    id,
+                    habitId,
+                    Completion.Status.fromInt(randomLongFromInterval(0, 3).toInt()),
+                    Date(randomLongFromInterval(1, 1000))
+            )
+        }
+
+        fun generateCompletionsList(habitId: Id, index: Int, count: Int = 3): List<Completion> {
+            return (0..count - 1)
+                    .map { i -> generateCompletionId(i, index) }
+                    .map { completionId -> generateCompletion(completionId, habitId) }
+        }
+
+        fun generateHabitsList(count: Int = 3): List<Habit> {
+            val list = ArrayList<Habit>(count)
+            for (i in 0..count - 1) {
+                val habitId = generateHabitId(i)
+                val habitTitle = generateHabitTitle(i)
+                val completions = generateCompletionsList(habitId, i)
+                val habit = Habit(habitId, habitTitle, completions, i)
+                list.add(habit)
+            }
+            return list
+        }
+
+        val habitsList = generateHabitsList()
+        repo.add(habitsList)
+        assertEquals(habitsList, queryAllHabits())
     }
 
     @Test
@@ -135,17 +174,22 @@ class HabitsSqliteRepoTest {
         val habitsIdsList = ArrayList<String>(habitsCursor.count)
         val idColInd = habitsCursor.getColumnIndex(HabitEntry.id)
         habitsCursor.moveToFirst()
-        do {
-            habitsIdsList.add(habitsCursor.getString(idColInd))
-        } while (habitsCursor.moveToNext())
-        val sb = StringBuilder()
-        habitsIdsList.forEachIndexed { index, id ->
-            sb.append("'$id'")
-            if (index != habitsIdsList.lastIndex) {
-                sb.append(", ")
+        val habitsIdsSelection: String
+        if (habitsCursor.count > 0) {
+            do {
+                habitsIdsList.add(habitsCursor.getString(idColInd))
+            } while (habitsCursor.moveToNext())
+            val sb = StringBuilder()
+            habitsIdsList.forEachIndexed { index, id ->
+                sb.append("'$id'")
+                if (index != habitsIdsList.lastIndex) {
+                    sb.append(", ")
+                }
             }
+            habitsIdsSelection = sb.toString()
+        } else {
+            habitsIdsSelection = ""
         }
-        val habitsIdsSelection = sb.toString()
         return habitsIdsSelection
     }
 
