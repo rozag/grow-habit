@@ -57,8 +57,8 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
     }
 
     override fun query(query: Query<Habit, SQLiteDatabase>): Observable<List<Habit>> {
-        // TODO
-        return Observable.empty()
+        // TODO return subjects
+        return Observable.fromCallable { query.query(readableDb) }
     }
 
     private fun addHabitToWritableDb(habit: Habit, writableDb: SQLiteDatabase) {

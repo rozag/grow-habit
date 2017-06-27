@@ -4,6 +4,7 @@ import android.content.Context
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import android.support.test.InstrumentationRegistry
+import com.vsrstudio.arch.Query
 import com.vsrstudio.entity.domain.*
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.CompletionEntry
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.DatabaseInfo
@@ -92,6 +93,16 @@ class HabitsSqliteRepoTest {
 
     @Test
     fun queryAllHabits_allHabitsReturned() {
+        val habits = generateHabitsList()
+        addHabits(habits)
+        val allHabitsQuery = object : Query<Habit, SQLiteDatabase> {
+            override fun query(readableStorage: SQLiteDatabase): List<Habit> {
+                return queryAllHabits()
+            }
+        }
+        repo.query(allHabitsQuery)
+                .test()
+                .assertValue(habits)
     }
 
     private fun applyToWritableDb(func: (SQLiteDatabase) -> Unit) {
