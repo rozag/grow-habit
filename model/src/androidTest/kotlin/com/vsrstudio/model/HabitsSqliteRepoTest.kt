@@ -51,60 +51,13 @@ class HabitsSqliteRepoTest {
 
     @Test
     fun addSingleHabit_habitAdded() {
-        val habitId = Id("test_id")
-        val habitToAdd = Habit(
-                habitId,
-                Title("test_title"),
-                listOf(
-                        Completion(Id("comp_id_1"), habitId, Completion.Status.DONE, Date(1L)),
-                        Completion(Id("comp_id_2"), habitId, Completion.Status.FAIL, Date(2L)),
-                        Completion(Id("comp_id_3"), habitId, Completion.Status.EMPTY, Date(3L)),
-                        Completion(Id("comp_id_4"), habitId, Completion.Status.SKIP, Date(4L))
-                ),
-                0
-        )
+        val habitToAdd = generateHabit()
         repo.add(habitToAdd)
         assertEquals(listOf(habitToAdd), queryAllHabits())
     }
 
     @Test
     fun addMultipleHabits_habitsAdded() {
-        fun generateHabitId(index: Int): Id = Id("habit_id_$index")
-        fun generateHabitTitle(index: Int): Title = Title("habit_title_$index")
-        fun generateCompletionId(index: Int, postfix: Int): Id = Id("completion_id_${postfix}_$index")
-
-        fun randomLongFromInterval(begin: Long, end: Long): Long {
-            val range = end - begin + 1
-            return (Math.random() * range).toLong() + begin
-        }
-
-        fun generateCompletion(id: Id, habitId: Id): Completion {
-            return Completion(
-                    id,
-                    habitId,
-                    Completion.Status.fromInt(randomLongFromInterval(0, 3).toInt()),
-                    Date(randomLongFromInterval(1, 1000))
-            )
-        }
-
-        fun generateCompletionsList(habitId: Id, index: Int, count: Int = 3): List<Completion> {
-            return (0..count - 1)
-                    .map { i -> generateCompletionId(i, index) }
-                    .map { completionId -> generateCompletion(completionId, habitId) }
-        }
-
-        fun generateHabitsList(count: Int = 3): List<Habit> {
-            val list = ArrayList<Habit>(count)
-            for (i in 0..count - 1) {
-                val habitId = generateHabitId(i)
-                val habitTitle = generateHabitTitle(i)
-                val completions = generateCompletionsList(habitId, i)
-                val habit = Habit(habitId, habitTitle, completions, i)
-                list.add(habit)
-            }
-            return list
-        }
-
         val habitsList = generateHabitsList()
         repo.add(habitsList)
         assertEquals(habitsList, queryAllHabits())
@@ -193,7 +146,8 @@ class HabitsSqliteRepoTest {
         return habitsIdsSelection
     }
 
-    private fun buildHabitIdToCompletionsListMapping(completions: List<Completion>): MutableMap<String, MutableList<Completion>> {
+    private fun buildHabitIdToCompletionsListMapping(completions: List<Completion>):
+            MutableMap<String, MutableList<Completion>> {
         val habitIdToCompletionListMap = mutableMapOf<String, MutableList<Completion>>()
         completions.forEach { completion ->
             val habitId = completion.habitId.value
@@ -208,6 +162,44 @@ class HabitsSqliteRepoTest {
             listFromMap.add(completion)
         }
         return habitIdToCompletionListMap
+    }
+
+    private fun generateHabitId(index: Int): Id = Id("habit_id_$index")
+
+    private fun generateHabitTitle(index: Int): Title = Title("habit_title_$index")
+
+    private fun generateCompletionId(index: Int, postfix: Int): Id = Id("completion_id_${postfix}_$index")
+
+    private fun randomLongFromInterval(begin: Long, end: Long): Long {
+        val range = end - begin + 1
+        return (Math.random() * range).toLong() + begin
+    }
+
+    private fun generateCompletion(id: Id, habitId: Id): Completion {
+        return Completion(
+                id,
+                habitId,
+                Completion.Status.fromInt(randomLongFromInterval(0, 3).toInt()),
+                Date(randomLongFromInterval(1, 1000))
+        )
+    }
+
+    private fun generateCompletionsList(habitId: Id, index: Int, count: Int = 3): List<Completion> {
+        return (0..count - 1)
+                .map { i -> generateCompletionId(i, index) }
+                .map { completionId -> generateCompletion(completionId, habitId) }
+    }
+
+    private fun generateHabit(index: Int = 0): Habit {
+        val habitId = generateHabitId(index)
+        val habitTitle = generateHabitTitle(index)
+        val completions = generateCompletionsList(habitId, index)
+        return Habit(habitId, habitTitle, completions, index)
+    }
+
+    private fun generateHabitsList(count: Int = 3): List<Habit> {
+        return (0..count - 1)
+                .map { index -> generateHabit(index) }
     }
 
 }
