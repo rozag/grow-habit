@@ -67,20 +67,18 @@ class HabitsSqliteRepoTest {
         val oldIndex = 0
         val habit = generateHabit(oldIndex)
         addHabits(listOf(habit))
-        val newIndex = 1
-        val newTitle = generateHabitTitle(newIndex)
-        val newPosition = habit.position + 1
-        val newCompletionId = generateCompletionId(habit.completions.size, newIndex)
-        val newCompletion = generateCompletion(newCompletionId, habit.id)
-        val updatedHabit = habit.rename(newTitle)
-                .addCompletion(newCompletion)
-                .changePosition(newPosition)
+        val updatedHabit = generateUpdatedHabit(habit, oldIndex)
         repo.update(updatedHabit)
         assertEquals(listOf(updatedHabit), queryAllHabits())
     }
 
     @Test
     fun updateMultipleHabits_habitsUpdated() {
+        val habits = generateHabitsList()
+        addHabits(habits)
+        val updatedHabits = generateUpdatedHabitsList(habits)
+        repo.update(updatedHabits)
+        assertEquals(updatedHabits, queryAllHabits())
     }
 
     @Test
@@ -210,6 +208,20 @@ class HabitsSqliteRepoTest {
     private fun generateHabitsList(count: Int = 3): List<Habit> {
         return (0..count - 1)
                 .map { index -> generateHabit(index) }
+    }
+
+    private fun generateUpdatedHabit(habit: Habit, newIndex: Int): Habit {
+        val newTitle = generateHabitTitle(newIndex)
+        val newPosition = habit.position + 1
+        val newCompletionId = generateCompletionId(habit.completions.size, newIndex)
+        val newCompletion = generateCompletion(newCompletionId, habit.id)
+        return habit.rename(newTitle)
+                .addCompletion(newCompletion)
+                .changePosition(newPosition)
+    }
+
+    private fun generateUpdatedHabitsList(habits: List<Habit>): List<Habit> {
+        return habits.mapIndexed { index, habit -> generateUpdatedHabit(habit, habits.size + index) }
     }
 
 }

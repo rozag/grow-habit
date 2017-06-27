@@ -28,40 +28,17 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
     }
 
     override fun add(itemsToAdd: List<Habit>) = applyToWritableDb { writableDb ->
-        itemsToAdd.map { habit -> addHabitToWritableDb(habit, writableDb) }
+        itemsToAdd.forEach { habit -> addHabitToWritableDb(habit, writableDb) }
         // TODO add habit sync data
         // TODO add completions sync data
     }
 
     override fun update(updatedItem: Habit) = applyToWritableDb { writableDb ->
-        val habitCv = habitToContentValuesMapper.map(updatedItem)
-        writableDb.update(
-                Table.habit,
-                habitCv,
-                "${HabitEntry.id} = ?",
-                arrayOf(updatedItem.id.value)
-        )
-        updatedItem.completions.map { completion ->
-            val completionCv = completionToContentValuesMapper.map(completion)
-            val insertResult = writableDb.insertWithOnConflict(
-                    Table.completion,
-                    null,
-                    completionCv,
-                    SQLiteDatabase.CONFLICT_IGNORE
-            )
-            if (insertResult == -1L) {
-                writableDb.update(
-                        Table.completion,
-                        completionCv,
-                        "${CompletionEntry.id} = ?",
-                        arrayOf(completion.id.value)
-                )
-            }
-        }
+        updateHabitWithWritableDb(updatedItem, writableDb)
     }
 
-    override fun update(updatedItems: List<Habit>) {
-        // TODO
+    override fun update(updatedItems: List<Habit>) = applyToWritableDb { writableDb ->
+        updatedItems.forEach { habit -> updateHabitWithWritableDb(habit, writableDb) }
     }
 
     override fun remove(itemToRemove: Habit) {
@@ -79,6 +56,33 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         val completionsContentValues = completionToContentValuesMapper.batchMap(habit.completions)
         completionsContentValues.forEach { completionCv ->
             writableDb.insert(Table.completion, null, completionCv)
+        }
+    }
+
+    private fun updateHabitWithWritableDb(habit: Habit, writableDb: SQLiteDatabase) {
+        val habitCv = habitToContentValuesMapper.map(habit)
+        writableDb.update(
+                Table.habit,
+                habitCv,
+                "${HabitEntry.id} = ?",
+                arrayOf(habit.id.value)
+        )
+        habit.completions.map { completion ->
+            val completionCv = completionToContentValuesMapper.map(completion)
+            val insertResult = writableDb.insertWithOnConflict(
+                    Table.completion,
+                    null,
+                    completionCv,
+                    SQLiteDatabase.CONFLICT_IGNORE
+            )
+            if (insertResult == -1L) {
+                writableDb.update(
+                        Table.completion,
+                        completionCv,
+                        "${CompletionEntry.id} = ?",
+                        arrayOf(completion.id.value)
+                )
+            }
         }
     }
 
