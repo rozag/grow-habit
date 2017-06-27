@@ -18,7 +18,7 @@ class HabitsControllerTest {
 
     private val subject: Subject<HabitsAction> = PublishSubject.create()
     @Suppress("UNCHECKED_CAST")
-    private val repo = mock(Repo::class.java) as Repo<Habit, *, *>
+    private val repo = mock(Repo::class.java) as Repo<Habit, *>
     private val idGenerator = object : IdGenerator {
         override fun generate(): String = "test_id"
     }

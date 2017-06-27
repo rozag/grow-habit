@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase
 import com.vsrstudio.arch.IdGenerator
 import com.vsrstudio.arch.Query
 import com.vsrstudio.arch.Repo
-import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.model.HabitsSqliteOpenHelper
 import com.vsrstudio.model.HabitsSqliteRepo
@@ -25,7 +24,7 @@ class AppContainer(context: Context) {
     val habitToContentValuesMapper = HabitToContentValuesMapper()
     val habitFromCursorMapper = HabitFromCursorMapper()
 
-    val habitsRepo: Repo<Habit, Query<Habit, SQLiteDatabase>, Update<Habit, SQLiteDatabase>> =
+    val habitsRepo: Repo<Habit, Query<Habit, SQLiteDatabase>> =
             HabitsSqliteRepo(
                     habitsSqliteOpenHelper,
                     habitToContentValuesMapper,

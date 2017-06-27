@@ -3,7 +3,6 @@ package com.vsrstudio.model
 import android.database.sqlite.SQLiteDatabase
 import com.vsrstudio.arch.Query
 import com.vsrstudio.arch.Repo
-import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.CompletionEntry
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.HabitEntry
@@ -19,30 +18,30 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
                        val habitFromCursorMapper: HabitFromCursorMapper,
                        val completionToContentValuesMapper: CompletionToContentValuesMapper,
                        val completionFromCursorMapper: CompletionFromCursorMapper) :
-        Repo<Habit, Query<Habit, SQLiteDatabase>, Update<Habit, SQLiteDatabase>> {
+        Repo<Habit, Query<Habit, SQLiteDatabase>> {
 
     private val readableDb: SQLiteDatabase = dbOpenHelper.readableDatabase
     private val writableDb: SQLiteDatabase = dbOpenHelper.writableDatabase
 
-    override fun add(item: Habit) = applyToWritableDb { writableDb ->
-        addHabitToWritableDb(item, writableDb)
+    override fun add(itemToAdd: Habit) = applyToWritableDb { writableDb ->
+        addHabitToWritableDb(itemToAdd, writableDb)
     }
 
-    override fun add(items: List<Habit>) = applyToWritableDb { writableDb ->
-        items.map { habit -> addHabitToWritableDb(habit, writableDb) }
+    override fun add(itemsToAdd: List<Habit>) = applyToWritableDb { writableDb ->
+        itemsToAdd.map { habit -> addHabitToWritableDb(habit, writableDb) }
         // TODO add habit sync data
         // TODO add completions sync data
     }
 
-    override fun update(item: Habit) = applyToWritableDb { writableDb ->
-        val habitCv = habitToContentValuesMapper.map(item)
+    override fun update(updatedItem: Habit) = applyToWritableDb { writableDb ->
+        val habitCv = habitToContentValuesMapper.map(updatedItem)
         writableDb.update(
                 Table.habit,
                 habitCv,
                 "${HabitEntry.id} = ?",
-                arrayOf(item.id.value)
+                arrayOf(updatedItem.id.value)
         )
-        item.completions.map { completion ->
+        updatedItem.completions.map { completion ->
             val completionCv = completionToContentValuesMapper.map(completion)
             val insertResult = writableDb.insertWithOnConflict(
                     Table.completion,
@@ -61,11 +60,11 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         }
     }
 
-    override fun update(items: List<Habit>, update: Update<Habit, SQLiteDatabase>) {
+    override fun update(updatedItems: List<Habit>) {
         // TODO
     }
 
-    override fun remove(item: Habit) {
+    override fun remove(itemToRemove: Habit) {
         // TODO
     }
 

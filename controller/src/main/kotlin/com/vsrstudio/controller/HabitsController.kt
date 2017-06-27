@@ -11,7 +11,7 @@ import io.reactivex.Scheduler
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
 
-class HabitsController(val repo: Repo<Habit, *, *>,
+class HabitsController(val repo: Repo<Habit, *>,
                        val idGenerator: IdGenerator,
                        val observeScheduler: Scheduler = Schedulers.io()) : Controller<HabitsAction> {
 

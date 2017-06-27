@@ -2,11 +2,11 @@ package com.vsrstudio.arch
 
 import io.reactivex.Observable
 
-interface Repo<Tp, in Qr : Query<Tp, *>, in Upd : Update<Tp, *>> {
-    fun add(item: Tp)
-    fun add(items: List<Tp>)
-    fun update(item: Tp)
-    fun update(items: List<Tp>, update: Upd)
-    fun remove(item: Tp)
+interface Repo<Tp, in Qr : Query<Tp, *>> {
+    fun add(itemToAdd: Tp)
+    fun add(itemsToAdd: List<Tp>)
+    fun update(updatedItem: Tp)
+    fun update(updatedItems: List<Tp>)
+    fun remove(itemToRemove: Tp)
     fun query(query: Qr): Observable<List<Tp>>
 }

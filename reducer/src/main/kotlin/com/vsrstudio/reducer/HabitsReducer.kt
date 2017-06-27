@@ -4,7 +4,6 @@ import android.database.sqlite.SQLiteDatabase
 import com.vsrstudio.arch.Query
 import com.vsrstudio.arch.Reducer
 import com.vsrstudio.arch.Repo
-import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.entity.viewstate.HabitsViewState
 import io.reactivex.Observable
@@ -16,7 +15,7 @@ import io.reactivex.subjects.Subject
 import timber.log.Timber
 
 // TODO: specify query
-class HabitsReducer(val repo: Repo<Habit, Query<Habit, SQLiteDatabase>, Update<Habit, SQLiteDatabase>>) : Reducer<HabitsViewState> {
+class HabitsReducer(val repo: Repo<Habit, Query<Habit, SQLiteDatabase>>) : Reducer<HabitsViewState> {
 
     private val subject: Subject<HabitsViewState> = PublishSubject.create()
     private val compositeDisposable: CompositeDisposable = CompositeDisposable()
