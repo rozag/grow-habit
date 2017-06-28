@@ -1,5 +1,6 @@
 package com.vsrstudio.model
 
+import android.content.ContentValues
 import android.database.Cursor
 import android.database.sqlite.SQLiteDatabase
 import com.vsrstudio.arch.Query
@@ -12,6 +13,7 @@ import com.vsrstudio.model.mapper.CompletionToContentValuesMapper
 import com.vsrstudio.model.mapper.HabitFromCursorMapper
 import com.vsrstudio.model.mapper.HabitToContentValuesMapper
 import io.reactivex.observers.TestObserver
+import junit.framework.Assert.assertEquals
 
 fun applyToWritableDb(writableDb: SQLiteDatabase, func: (SQLiteDatabase) -> Unit) {
     writableDb.beginTransaction()
@@ -225,4 +227,10 @@ fun assertObserversValues(observers: List<TestObserver<List<Habit>>>, habits: Li
     )
     observers[1].assertValue(habits.filterIndexed { index, _ -> index % 2 == 0 })
     observers[2].assertValue(habits)
+}
+
+fun assertHabitMatchesCv(habit: Habit, cv: ContentValues) {
+    assertEquals(habit.id.value, cv[HabitEntry.id])
+    assertEquals(habit.title.value, cv[HabitEntry.title])
+    assertEquals(habit.position, cv[HabitEntry.position])
 }

@@ -4,7 +4,6 @@ import android.content.ContentValues
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.HabitEntry
 
-// TODO: test
 class HabitToContentValuesMapper {
 
     fun map(habit: Habit): ContentValues {
