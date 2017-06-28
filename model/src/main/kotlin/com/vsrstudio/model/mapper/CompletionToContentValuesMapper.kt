@@ -4,7 +4,6 @@ import android.content.ContentValues
 import com.vsrstudio.entity.domain.Completion
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.CompletionEntry
 
-// TODO: test
 class CompletionToContentValuesMapper {
 
     fun map(completion: Completion): ContentValues {

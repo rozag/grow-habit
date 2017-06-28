@@ -234,3 +234,10 @@ fun assertHabitMatchesCv(habit: Habit, cv: ContentValues) {
     assertEquals(habit.title.value, cv[HabitEntry.title])
     assertEquals(habit.position, cv[HabitEntry.position])
 }
+
+fun assertCompletionMatchesCv(completion: Completion, cv: ContentValues) {
+    assertEquals(completion.id.value, cv[CompletionEntry.id])
+    assertEquals(completion.habitId.value, cv[CompletionEntry.habitId])
+    assertEquals(completion.status.value, cv[CompletionEntry.status])
+    assertEquals(completion.date.seconds, cv[CompletionEntry.date])
+}
