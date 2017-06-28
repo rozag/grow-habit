@@ -48,6 +48,7 @@ class SectionsActivity : BaseActivity(), BottomNavigationView.OnNavigationItemSe
         bottomNavigationView.setOnNavigationItemSelectedListener(this)
         currentView = savedInstanceState?.getInt(ARG_CURRENT_VIEW, VIEW_HABITS) ?: VIEW_HABITS
         showSelectedView()
+        // TODO: extract logger interface
     }
 
     override fun onSaveInstanceState(outState: Bundle?) {

@@ -23,6 +23,7 @@ class HabitsReducer(val repo: Repo<Habit, Query<Habit, SQLiteDatabase>>) : Reduc
     override fun observeViewState(): Observable<HabitsViewState> {
         repo.query(object : Query<Habit, SQLiteDatabase> {
             override fun query(readableStorage: SQLiteDatabase): List<Habit> = emptyList()
+            override fun uniqueId(): String = "temp_id"
         }).subscribe(object : Observer<List<Habit>> {
             override fun onNext(habits: List<Habit>) {
                 subject.onNext(HabitsViewState(habits))

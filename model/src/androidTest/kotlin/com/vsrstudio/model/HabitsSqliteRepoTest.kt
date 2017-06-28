@@ -14,12 +14,12 @@ import com.vsrstudio.model.mapper.CompletionFromCursorMapper
 import com.vsrstudio.model.mapper.CompletionToContentValuesMapper
 import com.vsrstudio.model.mapper.HabitFromCursorMapper
 import com.vsrstudio.model.mapper.HabitToContentValuesMapper
+import io.reactivex.observers.TestObserver
 import junit.framework.Assert.assertEquals
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-// TODO: test observer notified after updates
 class HabitsSqliteRepoTest {
 
     private val completionToContentValuesMapper = CompletionToContentValuesMapper()
@@ -54,80 +54,125 @@ class HabitsSqliteRepoTest {
     fun addSingleHabit_habitAdded() {
         val habitToAdd = generateHabit()
         repo.add(habitToAdd)
-        assertEquals(listOf(habitToAdd), queryAllHabits())
+        assertEquals(listOf(habitToAdd), queryAllHabits(dbOpenHelper.readableDatabase))
     }
 
     @Test
     fun addMultipleHabits_habitsAdded() {
         val habitsList = generateHabitsList()
         repo.add(habitsList)
-        assertEquals(habitsList, queryAllHabits())
+        assertEquals(habitsList, queryAllHabits(dbOpenHelper.readableDatabase))
     }
 
     @Test
     fun updateSingleHabit_habitUpdated() {
         val oldIndex = 0
         val habit = generateHabit(oldIndex)
-        addHabits(listOf(habit))
+        addHabits(dbOpenHelper.writableDatabase, listOf(habit))
         val updatedHabit = generateUpdatedHabit(habit, oldIndex)
         repo.update(updatedHabit)
-        assertEquals(listOf(updatedHabit), queryAllHabits())
+        assertEquals(listOf(updatedHabit), queryAllHabits(dbOpenHelper.readableDatabase))
     }
 
     @Test
     fun updateMultipleHabits_habitsUpdated() {
         val habits = generateHabitsList()
-        addHabits(habits)
+        addHabits(dbOpenHelper.writableDatabase, habits)
         val updatedHabits = generateUpdatedHabitsList(habits)
         repo.update(updatedHabits)
-        assertEquals(updatedHabits, queryAllHabits())
+        assertEquals(updatedHabits, queryAllHabits(dbOpenHelper.readableDatabase))
     }
 
     @Test
     fun removeSingleHabit_habitRemoved() {
         val habit = generateHabit()
-        addHabits(listOf(habit))
+        addHabits(dbOpenHelper.writableDatabase, listOf(habit))
         repo.remove(habit)
-        assertEquals(listOf<Habit>(), queryAllHabits())
+        assertEquals(listOf<Habit>(), queryAllHabits(dbOpenHelper.readableDatabase))
     }
 
     @Test
     fun queryAllHabits_allHabitsReturned() {
         val habits = generateHabitsList()
-        addHabits(habits)
+        addHabits(dbOpenHelper.writableDatabase, habits)
         val allHabitsQuery = object : Query<Habit, SQLiteDatabase> {
             override fun query(readableStorage: SQLiteDatabase): List<Habit> {
-                return queryAllHabits()
+                return queryAllHabits(dbOpenHelper.writableDatabase)
             }
+
+            override fun uniqueId(): String = "test_query_id"
         }
         repo.query(allHabitsQuery)
                 .test()
                 .assertValue(habits)
     }
 
-    private fun applyToWritableDb(func: (SQLiteDatabase) -> Unit) {
-        val writableDb = dbOpenHelper.writableDatabase
+    @Test
+    fun addSingleHabit_observersNotified() {
+        val habitToAdd = generateHabit()
+        val habitsList = listOf(habitToAdd)
+        val observers = assertDifferentObserversNotified(repo, habitsList)
+        repo.add(habitToAdd)
+        observers.forEach { observer -> observer.assertValue(habitsList) }
+    }
+
+//    @Test
+//    fun addMultipleHabits_observersNotified() {
+//        val habitsList = generateHabitsList()
+//        repo.add(habitsList)
+//        // TODO:
+//    }
+
+//    @Test
+//    fun updateSingleHabit_observersNotified() {
+//        val oldIndex = 0
+//        val habit = generateHabit(oldIndex)
+//        addHabits(listOf(habit))
+//        val updatedHabit = generateUpdatedHabit(habit, oldIndex)
+//        repo.update(updatedHabit)
+//        // TODO:
+//    }
+
+//    @Test
+//    fun updateMultipleHabits_observersNotified() {
+//        val habits = generateHabitsList()
+//        addHabits(habits)
+//        val updatedHabits = generateUpdatedHabitsList(habits)
+//        repo.update(updatedHabits)
+//        // TODO:
+//    }
+
+//    @Test
+//    fun removeSingleHabit_observersNotified() {
+//        val habit = generateHabit()
+//        addHabits(listOf(habit))
+//        repo.remove(habit)
+//        // TODO:
+//    }
+
+    private fun applyToWritableDb(writableDb: SQLiteDatabase, func: (SQLiteDatabase) -> Unit) {
         writableDb.beginTransaction()
         func(writableDb)
         writableDb.setTransactionSuccessful()
         writableDb.endTransaction()
     }
 
-    private fun addHabits(habits: List<Habit>) = applyToWritableDb { writableDatabase ->
-        val habitsContentValues = habitToContentValuesMapper.batchMap(habits)
-        val completionsContentValues = habits.flatMap { habit ->
-            completionToContentValuesMapper.batchMap(habit.completions)
-        }
-        habitsContentValues.forEach { cv ->
-            writableDatabase.insert(Table.habit, null, cv)
-        }
-        completionsContentValues.forEach { cv ->
-            writableDatabase.insert(Table.completion, null, cv)
+    private fun addHabits(writableDb: SQLiteDatabase, habits: List<Habit>) {
+        applyToWritableDb(writableDb) { writableDatabase ->
+            val habitsContentValues = habitToContentValuesMapper.batchMap(habits)
+            val completionsContentValues = habits.flatMap { habit ->
+                completionToContentValuesMapper.batchMap(habit.completions)
+            }
+            habitsContentValues.forEach { cv ->
+                writableDatabase.insert(Table.habit, null, cv)
+            }
+            completionsContentValues.forEach { cv ->
+                writableDatabase.insert(Table.completion, null, cv)
+            }
         }
     }
 
-    private fun queryAllHabits(): List<Habit> {
-        val readableDb = dbOpenHelper.readableDatabase
+    private fun queryAllHabits(readableDb: SQLiteDatabase): List<Habit> {
         val habitsCursor = readableDb.rawQuery(
                 "SELECT * FROM ${Table.habit};",
                 null
@@ -238,6 +283,53 @@ class HabitsSqliteRepoTest {
 
     private fun generateUpdatedHabitsList(habits: List<Habit>): List<Habit> {
         return habits.mapIndexed { index, habit -> generateUpdatedHabit(habit, habits.size + index) }
+    }
+
+    private fun generateQueryForSingleHabit(id: Id): Query<Habit, SQLiteDatabase> {
+        return object : Query<Habit, SQLiteDatabase> {
+            override fun query(readableStorage: SQLiteDatabase): List<Habit> {
+                return queryAllHabits(readableStorage)
+                        .filter { (habitId) -> habitId == id }
+            }
+
+            override fun uniqueId(): String = "query_single_habits"
+        }
+    }
+
+    private fun generateQueryForSeveralHabits(ids: List<Id>): Query<Habit, SQLiteDatabase> {
+        return object : Query<Habit, SQLiteDatabase> {
+            override fun query(readableStorage: SQLiteDatabase): List<Habit> {
+                return queryAllHabits(readableStorage)
+                        .filter { (habitId) -> habitId in ids }
+            }
+
+            override fun uniqueId(): String = "query_several_habits"
+        }
+    }
+
+    private fun generateQueryForAllHabits(): Query<Habit, SQLiteDatabase> {
+        return object : Query<Habit, SQLiteDatabase> {
+            override fun query(readableStorage: SQLiteDatabase): List<Habit> {
+                return queryAllHabits(readableStorage)
+            }
+
+            override fun uniqueId(): String = "query_all_habits"
+        }
+    }
+
+    private fun assertDifferentObserversNotified(repo: HabitsSqliteRepo,
+                                                 habits: List<Habit>): List<TestObserver<List<Habit>>> {
+        return listOf(
+                repo.query(generateQueryForSingleHabit(habits[0].id))
+                        .skip(1) // Skip the first emission
+                        .test(),
+                repo.query(generateQueryForSeveralHabits(habits.map { (id) -> id }))
+                        .skip(1) // Skip the first emission
+                        .test(),
+                repo.query(generateQueryForAllHabits())
+                        .skip(1) // Skip the first emission
+                        .test()
+        )
     }
 
 }

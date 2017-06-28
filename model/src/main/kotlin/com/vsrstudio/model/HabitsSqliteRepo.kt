@@ -12,32 +12,38 @@ import com.vsrstudio.model.mapper.CompletionToContentValuesMapper
 import com.vsrstudio.model.mapper.HabitFromCursorMapper
 import com.vsrstudio.model.mapper.HabitToContentValuesMapper
 import io.reactivex.Observable
+import io.reactivex.subjects.ReplaySubject
+import io.reactivex.subjects.Subject
+
+private typealias HabitList = List<Habit>
+private typealias HabitSqliteQuery = Query<Habit, SQLiteDatabase>
+private typealias QuerySubjectPair = Pair<HabitSqliteQuery, Subject<HabitList>>
 
 class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
                        val habitToContentValuesMapper: HabitToContentValuesMapper,
                        val habitFromCursorMapper: HabitFromCursorMapper,
                        val completionToContentValuesMapper: CompletionToContentValuesMapper,
                        val completionFromCursorMapper: CompletionFromCursorMapper) :
-        Repo<Habit, Query<Habit, SQLiteDatabase>> {
+        Repo<Habit, HabitSqliteQuery> {
 
     private val readableDb: SQLiteDatabase = dbOpenHelper.readableDatabase
     private val writableDb: SQLiteDatabase = dbOpenHelper.writableDatabase
+    private val subscribers: MutableMap<String, QuerySubjectPair> = mutableMapOf()
 
     override fun add(itemToAdd: Habit) = applyToWritableDb { writableDb ->
         addHabitToWritableDb(itemToAdd, writableDb)
+        notifyAboutUpdates()
     }
 
-    override fun add(itemsToAdd: List<Habit>) = applyToWritableDb { writableDb ->
+    override fun add(itemsToAdd: HabitList) = applyToWritableDb { writableDb ->
         itemsToAdd.forEach { habit -> addHabitToWritableDb(habit, writableDb) }
-        // TODO add habit sync data
-        // TODO add completions sync data
     }
 
     override fun update(updatedItem: Habit) = applyToWritableDb { writableDb ->
         updateHabitWithWritableDb(updatedItem, writableDb)
     }
 
-    override fun update(updatedItems: List<Habit>) = applyToWritableDb { writableDb ->
+    override fun update(updatedItems: HabitList) = applyToWritableDb { writableDb ->
         updatedItems.forEach { habit -> updateHabitWithWritableDb(habit, writableDb) }
     }
 
@@ -56,9 +62,11 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         )
     }
 
-    override fun query(query: Query<Habit, SQLiteDatabase>): Observable<List<Habit>> {
-        // TODO return subjects
-        return Observable.fromCallable { query.query(readableDb) }
+    override fun query(query: HabitSqliteQuery): Observable<HabitList> {
+        val subject = createOrRetrieveCachedSubject(query)
+        val habits = query.query(readableDb)
+        subject.onNext(habits)
+        return subject
     }
 
     private fun addHabitToWritableDb(habit: Habit, writableDb: SQLiteDatabase) {
@@ -68,6 +76,8 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         completionsContentValues.forEach { completionCv ->
             writableDb.insert(Table.completion, null, completionCv)
         }
+        // TODO add habit sync data
+        // TODO add completions sync data
     }
 
     private fun updateHabitWithWritableDb(habit: Habit, writableDb: SQLiteDatabase) {
@@ -102,6 +112,27 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         func(writableDb)
         writableDb.setTransactionSuccessful()
         writableDb.endTransaction()
+    }
+
+    private fun notifyAboutUpdates() {
+        for ((_, querySubjectPair) in subscribers.entries) {
+            val (query, subject) = querySubjectPair
+            val habits = query.query(readableDb)
+            subject.onNext(habits)
+        }
+    }
+
+    private fun createOrRetrieveCachedSubject(query: HabitSqliteQuery): Subject<HabitList> {
+        val queryId = query.uniqueId()
+        val querySubjectPair: QuerySubjectPair? = subscribers[queryId]
+        val subject = if (querySubjectPair == null) {
+            val newSubject = ReplaySubject.createWithSize<HabitList>(1)
+            subscribers[queryId] = QuerySubjectPair(query, newSubject)
+            newSubject
+        } else {
+            querySubjectPair.second
+        }
+        return subject
     }
 
 }
