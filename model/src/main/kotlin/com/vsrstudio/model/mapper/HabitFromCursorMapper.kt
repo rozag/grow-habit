@@ -7,10 +7,12 @@ import com.vsrstudio.entity.domain.Id
 import com.vsrstudio.entity.domain.Title
 import com.vsrstudio.model.HabitsSqliteOpenHelper.Scheme.HabitEntry
 
-// TODO: test
 class HabitFromCursorMapper {
 
     fun map(cursor: Cursor, completions: List<Completion> = listOf()): Habit {
+        if (cursor.count == 0) {
+            throw IllegalArgumentException("Cursor is empty")
+        }
         val idColInd = cursor.getColumnIndex(HabitEntry.id)
         val titleColInd = cursor.getColumnIndex(HabitEntry.title)
         val positionColInd = cursor.getColumnIndex(HabitEntry.position)
