@@ -111,17 +111,18 @@ class HabitsSqliteRepoTest {
     fun addSingleHabit_observersNotified() {
         val habitToAdd = generateHabit()
         val habitsList = listOf(habitToAdd)
-        val observers = assertDifferentObserversNotified(repo, habitsList)
+        val observers = subscribeDifferentObservers(repo, habitsList)
         repo.add(habitToAdd)
-        observers.forEach { observer -> observer.assertValue(habitsList) }
+        assertObserversValues(observers, habitsList)
     }
 
-//    @Test
-//    fun addMultipleHabits_observersNotified() {
-//        val habitsList = generateHabitsList()
-//        repo.add(habitsList)
-//        // TODO:
-//    }
+    @Test
+    fun addMultipleHabits_observersNotified() {
+        val habitsList = generateHabitsList()
+        val observers = subscribeDifferentObservers(repo, habitsList)
+        repo.add(habitsList)
+        assertObserversValues(observers, habitsList)
+    }
 
 //    @Test
 //    fun updateSingleHabit_observersNotified() {
@@ -317,19 +318,26 @@ class HabitsSqliteRepoTest {
         }
     }
 
-    private fun assertDifferentObserversNotified(repo: HabitsSqliteRepo,
-                                                 habits: List<Habit>): List<TestObserver<List<Habit>>> {
+    private fun subscribeDifferentObservers(repo: HabitsSqliteRepo,
+                                            habits: List<Habit>): List<TestObserver<List<Habit>>> {
         return listOf(
                 repo.query(generateQueryForSingleHabit(habits[0].id))
                         .skip(1) // Skip the first emission
                         .test(),
-                repo.query(generateQueryForSeveralHabits(habits.map { (id) -> id }))
+                repo.query(generateQueryForSeveralHabits(
+                        habits.filterIndexed { index, _ -> index % 2 == 0 }.map { (id) -> id }))
                         .skip(1) // Skip the first emission
                         .test(),
                 repo.query(generateQueryForAllHabits())
                         .skip(1) // Skip the first emission
                         .test()
         )
+    }
+
+    private fun assertObserversValues(observers: List<TestObserver<List<Habit>>>, habits: List<Habit>) {
+        observers[0].assertValue(habits.subList(0, 1))
+        observers[1].assertValue(habits.filterIndexed { index, _ -> index % 2 == 0 })
+        observers[2].assertValue(habits)
     }
 
 }

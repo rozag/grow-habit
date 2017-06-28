@@ -37,6 +37,7 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
 
     override fun add(itemsToAdd: HabitList) = applyToWritableDb { writableDb ->
         itemsToAdd.forEach { habit -> addHabitToWritableDb(habit, writableDb) }
+        notifyAboutUpdates()
     }
 
     override fun update(updatedItem: Habit) = applyToWritableDb { writableDb ->
