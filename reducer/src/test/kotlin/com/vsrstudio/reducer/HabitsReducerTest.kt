@@ -2,7 +2,6 @@ package com.vsrstudio.reducer
 
 import com.vsrstudio.arch.Query
 import com.vsrstudio.arch.Repo
-import com.vsrstudio.arch.Update
 import com.vsrstudio.entity.domain.Habit
 import com.vsrstudio.entity.domain.Id
 import com.vsrstudio.entity.domain.Title
@@ -22,12 +21,12 @@ class HabitsReducerTest {
             Habit(Id("id_3"), Title("title_3"), listOf(), 2)
     )
     private val subject: Subject<List<Habit>> = PublishSubject.create()
-    private val repo = object : Repo<Habit, Query<Habit, *>, Update<Habit, *>> {
-        override fun add(item: Habit) = Unit
-        override fun add(items: List<Habit>) = Unit
-        override fun update(item: Habit) = Unit
-        override fun update(items: List<Habit>, update: Update<Habit, *>) = Unit
-        override fun remove(item: Habit) = Unit
+    private val repo = object : Repo<Habit, Query<Habit, *>> {
+        override fun add(itemToAdd: Habit) = Unit
+        override fun add(itemsToAdd: List<Habit>) = Unit
+        override fun update(updatedItem: Habit) = Unit
+        override fun update(items: List<Habit>) = Unit
+        override fun remove(itemToRemove: Habit) = Unit
         override fun query(query: Query<Habit, *>): Observable<List<Habit>> = subject
     }
     private val reducer = HabitsReducer(repo)
