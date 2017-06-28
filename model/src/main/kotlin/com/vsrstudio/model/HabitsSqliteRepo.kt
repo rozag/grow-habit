@@ -32,12 +32,10 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
 
     override fun add(itemToAdd: Habit) = applyToWritableDb { writableDb ->
         addHabitToWritableDb(itemToAdd, writableDb)
-        notifyAboutUpdates()
     }
 
     override fun add(itemsToAdd: HabitList) = applyToWritableDb { writableDb ->
         itemsToAdd.forEach { habit -> addHabitToWritableDb(habit, writableDb) }
-        notifyAboutUpdates()
     }
 
     override fun update(updatedItem: Habit) = applyToWritableDb { writableDb ->
@@ -108,11 +106,12 @@ class HabitsSqliteRepo(dbOpenHelper: HabitsSqliteOpenHelper,
         }
     }
 
-    private fun applyToWritableDb(func: (SQLiteDatabase) -> Unit) {
+    private inline fun applyToWritableDb(operation: (SQLiteDatabase) -> Unit) {
         writableDb.beginTransaction()
-        func(writableDb)
+        operation(writableDb)
         writableDb.setTransactionSuccessful()
         writableDb.endTransaction()
+        notifyAboutUpdates()
     }
 
     private fun notifyAboutUpdates() {

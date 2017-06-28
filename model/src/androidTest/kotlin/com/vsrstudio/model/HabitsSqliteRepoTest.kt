@@ -124,32 +124,37 @@ class HabitsSqliteRepoTest {
         assertObserversValues(observers, habitsList)
     }
 
-//    @Test
-//    fun updateSingleHabit_observersNotified() {
-//        val oldIndex = 0
-//        val habit = generateHabit(oldIndex)
-//        addHabits(listOf(habit))
-//        val updatedHabit = generateUpdatedHabit(habit, oldIndex)
-//        repo.update(updatedHabit)
-//        // TODO:
-//    }
+    @Test
+    fun updateSingleHabit_observersNotified() {
+        val oldIndex = 0
+        val habit = generateHabit(oldIndex)
+        addHabits(dbOpenHelper.writableDatabase, listOf(habit))
+        val updatedHabit = generateUpdatedHabit(habit, oldIndex)
+        val habits = listOf(updatedHabit)
+        val observers = subscribeDifferentObservers(repo, habits)
+        repo.update(updatedHabit)
+        assertObserversValues(observers, habits)
+    }
 
-//    @Test
-//    fun updateMultipleHabits_observersNotified() {
-//        val habits = generateHabitsList()
-//        addHabits(habits)
-//        val updatedHabits = generateUpdatedHabitsList(habits)
-//        repo.update(updatedHabits)
-//        // TODO:
-//    }
+    @Test
+    fun updateMultipleHabits_observersNotified() {
+        val habits = generateHabitsList()
+        addHabits(dbOpenHelper.writableDatabase, habits)
+        val updatedHabits = generateUpdatedHabitsList(habits)
+        val observers = subscribeDifferentObservers(repo, updatedHabits)
+        repo.update(updatedHabits)
+        assertObserversValues(observers, updatedHabits)
+    }
 
-//    @Test
-//    fun removeSingleHabit_observersNotified() {
-//        val habit = generateHabit()
-//        addHabits(listOf(habit))
-//        repo.remove(habit)
-//        // TODO:
-//    }
+    @Test
+    fun removeSingleHabit_observersNotified() {
+        val habit = generateHabit()
+        val habitList = listOf(habit)
+        addHabits(dbOpenHelper.writableDatabase, habitList)
+        val observers = subscribeDifferentObservers(repo, habitList)
+        repo.remove(habit)
+        assertObserversValues(observers, listOf())
+    }
 
     private fun applyToWritableDb(writableDb: SQLiteDatabase, func: (SQLiteDatabase) -> Unit) {
         writableDb.beginTransaction()
@@ -335,7 +340,13 @@ class HabitsSqliteRepoTest {
     }
 
     private fun assertObserversValues(observers: List<TestObserver<List<Habit>>>, habits: List<Habit>) {
-        observers[0].assertValue(habits.subList(0, 1))
+        observers[0].assertValue(
+                if (habits.isEmpty()) {
+                    habits
+                } else {
+                    habits.subList(0, 1)
+                }
+        )
         observers[1].assertValue(habits.filterIndexed { index, _ -> index % 2 == 0 })
         observers[2].assertValue(habits)
     }
